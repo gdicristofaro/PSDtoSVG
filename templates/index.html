@@ -1,0 +1,103 @@
+<html>
+    <head>
+        <title>PSD to SVG</title>
+        <script
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/downloadjs/1.4.7/download.min.js"/></script>
+
+        <script>
+            var svg_doc = undefined;
+            $(document).ready(function() {
+                $("#upload_input").change(function(e) {
+                    var selectorFiles = e.target.files;
+                    
+                    var fd = new FormData();    
+                    fd.append( 'psd_file', selectorFiles[0] );
+
+                    $.ajax({
+                        url: 'upload',
+                        data: fd,
+                        processData: false,
+                        contentType: false,
+                        type: 'POST',
+                        success: function(data){
+                            svg_doc = (new XMLSerializer()).serializeToString(data);
+                            $("#img_loc").html(svg_doc);
+                            $("#download").removeClass("disabled");
+                        },
+                        error: function(j,t,error) {
+                            console.log(j,t,error);
+                            alert("There was an error loading the psd file: " + error);
+                        }
+                    });
+                });
+
+                $("#download").click(function() {
+                    if (svg_doc)
+                        download(svg_doc, "output.svg", "image/svg+xml");
+                });
+
+                $("#upload").click(function() {
+                    $("#upload_input").click();
+                });
+            })
+        </script>
+
+        <style>
+            .MainContainer {
+                display: inline-block; 
+                padding: 10px; 
+                width: 520px; 
+                height: 520px;
+            }
+
+            #img_loc {
+                width: 500px; 
+                height: 500px; 
+                display: flex; 
+                justify-content: center; 
+                align-items: center;
+            }
+
+            #img_loc > svg {
+                width: 100%;
+                height: 100%;
+            }
+
+            .align_c {
+                text-align: center;
+            }
+
+            .inline_b {
+                display: inline-block;
+            }
+
+            .button_holder {
+                display: inline-block; 
+                margin: 0px 10px;
+            }
+        </style>
+    </head>
+    <body>
+
+        <div class="align_c">
+            <div class="card MainContainer">
+                <div id="img_loc"></div>
+            </div>
+        </div>
+
+        <div class="align_c">
+            <div class="inline_b">
+                <input style="display: none;" id="upload_input" type="file" name="psd_file" />
+
+                <div class="button_holder"><a id="upload" class="waves-effect waves-light btn-large">Upload PSD</a></div>
+                <div class="button_holder"><a id="download" class="waves-effect waves-light btn-large disabled">Download SVG</a></div>
+            </div>
+        </div>
+    </body>
+</html>
