@@ -69,10 +69,6 @@
                 height: 100%;
             }
 
-            .align_c {
-                text-align: center;
-            }
-
             .inline_b {
                 display: inline-block;
             }
@@ -81,23 +77,72 @@
                 display: inline-block; 
                 margin: 0px 10px;
             }
+
+            .header {
+                margin: 0 0;
+                font-weight: 200;
+                font-size: 3.5rem;
+            }
+
+            .smallerheader {
+                font-weight: 200;
+                font-size: 2rem;
+                margin: 0 0;
+            }
+
+            .beetleimg {
+                height: 200px;
+            }
+
+            .smallspacing {
+                margin: 10px 0;
+            }
+
+            .rowspacer {
+                margin: 50px 0px;
+            }
+
+            body {
+                margin-bottom: 50px;
+            }
         </style>
     </head>
     <body>
-
-        <div class="align_c">
+        <div class="center">
+            <h1 class="header">PSD to SVG</h1>
+        </div>
+        <div class="center">
             <div class="card MainContainer">
                 <div id="img_loc"></div>
             </div>
         </div>
 
-        <div class="align_c">
-            <div class="inline_b">
-                <input style="display: none;" id="upload_input" type="file" name="psd_file" />
+        <div class="center">
+            <input style="display: none;" id="upload_input" type="file" name="psd_file" />
 
-                <div class="button_holder"><a id="upload" class="waves-effect waves-light btn-large">Upload PSD</a></div>
-                <div class="button_holder"><a id="download" class="waves-effect waves-light btn-large disabled">Download SVG</a></div>
+            <div class="button_holder"><a id="upload" class="waves-effect waves-light btn-large">Upload PSD</a></div>
+            <div class="button_holder"><a id="download" class="waves-effect waves-light btn-large disabled">Download SVG</a></div>
+        </div>
+
+        <div class="center rowspacer">
+            <h2 class="smallerheader">See a Sample</h2>
+            <div class="smallspacing">
+                <img src="static/beetle.png" class="beetleimg" alt="picture of a VW Beetle"/>
             </div>
+            <div>
+                <div class="button_holder"><a href="static/beetle.psd" class="waves-effect waves-light btn">The PSD</a></div>
+                <div class="button_holder"><a href="static/beetle.svg" class="waves-effect waves-light btn">The SVG</a></div>        
+            </div>
+        </div>
+
+        <div class="center rowspacer">
+            <h2 class="smallerheader smallspacing">Watch the Video</h2>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/5OeyH-UHewI" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+
+        <div class="center">
+            <h2 class="smallerheader smallspacing">Try the SVG Manipulator</h2>
+            <div class="button_holder"><a href="svgmanipulator.html" class="waves-effect waves-light btn">Click here</a></div>
         </div>
     </body>
 </html>

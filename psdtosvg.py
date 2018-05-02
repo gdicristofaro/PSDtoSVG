@@ -247,6 +247,10 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
+@app.route("/svgmanipulator.html")
+def manipulator():
+    return render_template('svgmanipulator.html')
+
 @app.route("/upload", methods=['POST'])
 def upload_file():
     try:
