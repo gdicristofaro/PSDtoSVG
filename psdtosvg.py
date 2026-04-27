@@ -5,7 +5,8 @@
 * PSD to SVG
 '''
 
-from psd_tools import PSDImage, Group, Layer
+from psd_tools import PSDImage
+from psd_tools.api.layers import Group, Layer
 import base64
 from io import BytesIO
 import re
@@ -63,20 +64,20 @@ def svg_converter(layer, id_num, get_dataurl=False):
     """
     # get metrics for layer
     # print layer
-    x_offset = layer.bbox.x1
-    y_offset = layer.bbox.y1
-    width = layer.bbox.width
-    height = layer.bbox.height
+    x_offset = layer.bbox[0]
+    y_offset = layer.bbox[1]
+    width = layer.bbox[2] - layer.bbox[0]
+    height = layer.bbox[3] - layer.bbox[1]
 
     if width <= 0 or height <= 0:
         return {}
 
     # get alpha channel
-    pil_img = layer.as_PIL()
+    pil_img = layer.topil()
     layer_id = str(re.sub(r'\W+', '', "%s_%d" % (layer.name, id_num)))
 
     pil_img.convert('RGBA')
-    img_dat = pil_img.getdata()
+    img_dat = pil_img.get_flattened_data()
 
     # cannot convert image or should be dataurl anyway, convert to image
     if len(img_dat[0]) < 4 or get_dataurl:
@@ -88,6 +89,7 @@ def svg_converter(layer, id_num, get_dataurl=False):
         img_bytes = buffer.read()
         base64_bytes = base64.b64encode(img_bytes)
         base64_str = base64_bytes.decode('ascii')
+        print("base64 is " + base64_str[:30] + "... (" + str(len(base64_str)) + " characters)")
 
         # base64 string from https://en.wikipedia.org/wiki/Data_URI_scheme
         return {
@@ -120,13 +122,17 @@ def gather_layers(item):
     image, a PSD group, or a PSD layer)
     :returns: a list of layers
     """
-    if isinstance(item, PSDImage) or isinstance(item, Group):
+    if isinstance(item, PSDImage):
         layer_list = []
-
-        for child in item.layers:
+        for child in item:
             child_layers = gather_layers(child)
             layer_list.extend(child_layers)
-
+        return layer_list
+    elif isinstance(item, Group):
+        layer_list = []
+        for child in item.group_layers:
+            child_layers = gather_layers(child)
+            layer_list.extend(child_layers)
         return layer_list
     elif isinstance(item, Layer):
         return [item]
@@ -145,7 +151,7 @@ def handle_layers(psd):
     for index, layer in enumerate(layer_list):
 
         # last image is left as image and not converted to svg
-        if index == len(layer_list) - 1:
+        if index == 0: #len(layer_list) - 1:
             svg_strs.append(svg_converter(layer, index, True))
         else:
             svg_strs.append(svg_converter(layer, index))
@@ -173,7 +179,7 @@ def get_svg(all_layers, width, height):
    viewBox="0 0 %d %d"
    version="1.1">''' % (width, height)
 
-    for g in reversed(all_layers):
+    for g in all_layers:
         if 'image' in g:
             svg_str += (('<image class="%s" xlink:href="%s" height="%d"' +
                          ' width="%d" x="%d" y="%d"/>\n') %
@@ -204,8 +210,8 @@ def psd_to_svg(psd):
     :returns: the svg string
     """
     all_groups = handle_layers(psd)
-    width = psd.header.width
-    height = psd.header.height
+    width = psd.width
+    height = psd.height
     return get_svg(all_groups, width, height)
 
 
@@ -215,7 +221,7 @@ def psd_file_to_svg(psd_path):
     :param psd_path: the path to the psd
     :returns: the svg string
     """
-    psd = PSDImage.load(psd_path)
+    psd = PSDImage.open(psd_path)
     return psd_to_svg(psd)
 
 
@@ -225,7 +231,7 @@ def psd_stream_to_svg(psd_stream):
     :param psd_stream: the psd stream
     :returns: the svg string
     """
-    psd = PSDImage.from_stream(psd_stream)
+    psd = PSDImage.open(psd_stream)
     return psd_to_svg(psd)
 
 
@@ -251,20 +257,26 @@ def index():
 def manipulator():
     return render_template('svgmanipulator.html')
 
+@app.route("/animations.html")
+def animations():
+    return render_template('animations.html')
+
 @app.route("/upload", methods=['POST'])
 def upload_file():
     try:
         psd_file = request.files['psd_file'].stream
-        psd = PSDImage.from_stream(psd_file)
-    except:
-        abort(400, "Unable to parse uploaded file as PSD.")
+        psd = PSDImage.open(psd_file)
+    except Exception as e:
+        print("Unable to parse uploaded file as PSD." + str(e))
+        abort(500, "Unable to parse uploaded file as PSD.")
 
     try:
         svg_str = psd_to_svg(psd).encode('utf8')
         return Response(svg_str, mimetype='image/svg+xml')
-    except:
+    except Exception as e:
+        print("Unable to handle request." + str(e))
         abort(500, "Unable to handle request.")
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)

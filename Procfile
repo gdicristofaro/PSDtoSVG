@@ -1,1 +1,0 @@
-web: gunicorn psdtosvg:app --log-file=-
