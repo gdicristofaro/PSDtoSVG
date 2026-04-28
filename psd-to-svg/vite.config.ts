@@ -6,7 +6,7 @@ import { fileURLToPath } from "url";
 
 // pyodide setup taken from: https://pyodide.org/en/latest/usage/working-with-bundlers.html
 
-const PYODIDE_PACKAGES = new Set(['micropip', 'psd-tools', 'pillow']);
+const PYODIDE_PACKAGES = new Set(['micropip', 'pillow', 'psd-tools']);
 
 const pyodideDirName = "pyodide";
 
