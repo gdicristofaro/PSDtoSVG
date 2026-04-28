@@ -1,11 +1,39 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useState } from 'react';
+import reactLogo from './assets/react.svg';
+import viteLogo from './assets/vite.svg';
+import heroImg from './assets/hero.png';
+import './App.css';
+import { loadPyodide, type PyodideInterface } from 'pyodide';
+
+async function loadPyodideAndPackages(): Promise<PyodideInterface> {
+  const pyodide = await loadPyodide({
+    indexURL: '/assets/pyodide/'
+  });
+
+  await pyodide.loadPackage('micropip-0.11.1.tar.gz');
+  // pyodide.pyimport('micropip');
+
+  // const response = await fetch("/assets/pyodideimports/"); // .zip, .whl, ...
+  // const buffer = await response.arrayBuffer();
+  // pyodide.pyi
+  // await pyodide.unpackArchive(buffer, "gztar"); // by default, unpacks to the current dir
+  // pyodide.pyimport("your_package");
+
+  // await pyodide.loadPackage(['micropip', 'pillow', 'psd-tools']);
+  return pyodide;
+}
+
+function runpython(pyodide: PyodideInterface) {
+  pyodide.runPython('print(1 + 2)');
+}
+
+async function loadAndRun() {
+  const pyodide = await loadPyodideAndPackages();
+  runpython(pyodide);
+}
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count] = useState(0);
 
   return (
     <>
@@ -21,11 +49,7 @@ function App() {
             Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
           </p>
         </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
+        <button type="button" className="counter" onClick={() => loadAndRun()}>
           Count is {count}
         </button>
       </section>
@@ -116,7 +140,7 @@ function App() {
       <div className="ticks"></div>
       <section id="spacer"></section>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
