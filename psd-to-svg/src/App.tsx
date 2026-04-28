@@ -5,26 +5,20 @@ import heroImg from './assets/hero.png';
 import './App.css';
 import { loadPyodide, type PyodideInterface } from 'pyodide';
 
+const BASE_PACKAGE_PATH = '/assets/pyodide/imports/';
+const PACKAGES = [
+  'micropip-0.11.0-py3-none-any.whl',
+  'pillow-11.3.0-cp313-cp313-pyodide_2025_0_wasm32.whl',
+  'psd_tools-1.16.0-cp313-cp313-pyemscripten_2025_0_wasm32.whl',
+  'psdtosvg-1.0.0-py3-none-any.whl',
+  'potrace-1.0.0-py3-none-any.whl'
+];
+
 async function loadPyodideAndPackages(): Promise<PyodideInterface> {
   const pyodide = await loadPyodide({
     indexURL: '/assets/pyodide/',
-    packages: [
-      '/assets/pyodide/imports/micropip-0.11.0-py3-none-any.whl',
-      '/assets/pyodide/imports/pillow-11.3.0-cp313-cp313-pyodide_2025_0_wasm32.whl',
-      '/assets/pyodide/imports/psd_tools-1.16.0-cp313-cp313-pyemscripten_2025_0_wasm32.whl'
-    ]
+    packages: PACKAGES.map((pkg) => `${BASE_PACKAGE_PATH}${pkg}`)
   });
-
-  // await pyodide.loadPackage('micropip-0.11.1.tar.gz');
-  // pyodide.pyimport('micropip');
-
-  // const response = await fetch("/assets/pyodideimports/"); // .zip, .whl, ...
-  // const buffer = await response.arrayBuffer();
-  // pyodide.pyi
-  // await pyodide.unpackArchive(buffer, "gztar"); // by default, unpacks to the current dir
-  // pyodide.pyimport("your_package");
-
-  // await pyodide.loadPackage(['micropip', 'pillow', 'psd-tools']);
   return pyodide;
 }
 

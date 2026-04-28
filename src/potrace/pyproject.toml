@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "potrace"
+version = "1.0.0"
+description = "A Python port of the Potrace algorithm for tracing bitmaps to SVG paths"
+readme = "README.md"
+license = {text = "GPL-3.0"}
+authors = [
+    {name = "Greg DiCristofaro"}
+]
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+[project.urls]
+Homepage = "https://github.com/gdicristofaro/PSDtoSVG"
+Repository = "https://github.com/gdicristofaro/PSDtoSVG"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["potrace*"]
+
+[tool.setuptools.package-data]
+potrace = ["*.py"]
