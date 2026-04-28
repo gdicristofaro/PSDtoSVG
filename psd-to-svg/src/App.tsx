@@ -7,10 +7,15 @@ import { loadPyodide, type PyodideInterface } from 'pyodide';
 
 async function loadPyodideAndPackages(): Promise<PyodideInterface> {
   const pyodide = await loadPyodide({
-    indexURL: '/assets/pyodide/'
+    indexURL: '/assets/pyodide/',
+    packages: [
+      '/assets/pyodide/imports/micropip-0.11.0-py3-none-any.whl',
+      '/assets/pyodide/imports/pillow-11.3.0-cp313-cp313-pyodide_2025_0_wasm32.whl',
+      '/assets/pyodide/imports/psd_tools-1.16.0-cp313-cp313-pyemscripten_2025_0_wasm32.whl'
+    ]
   });
 
-  await pyodide.loadPackage('micropip-0.11.1.tar.gz');
+  // await pyodide.loadPackage('micropip-0.11.1.tar.gz');
   // pyodide.pyimport('micropip');
 
   // const response = await fetch("/assets/pyodideimports/"); // .zip, .whl, ...
@@ -24,7 +29,7 @@ async function loadPyodideAndPackages(): Promise<PyodideInterface> {
 }
 
 function runpython(pyodide: PyodideInterface) {
-  pyodide.runPython('print(1 + 2)');
+  pyodide.runPython(`print(1 + 2)`);
 }
 
 async function loadAndRun() {
