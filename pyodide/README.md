@@ -8,6 +8,8 @@ https://pyodide.org/en/stable/development/building-from-sources.html
 https://github.com/pyodide/pyodide/issues/6177
 https://pyodide.org/en/stable/console.html
 https://pypi.org/project/pyodide-build/#history
+https://emscripten.org/docs/getting_started/downloads.html
+
 
 # React + TypeScript + Vite
 
