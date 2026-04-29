@@ -1,3 +1,14 @@
+# Important Links
+
+https://verbitskiy.co/blog/no-backend-needed-running-python-in-react-with-pyodide/#:~:text=But%20for%20real%20production%20apps,TypeScript%20so%20Pyodide%20works%20in%3A
+https://pyodide.org/en/stable/usage/loading-packages.html
+https://pyodide.org/en/stable/usage/loading-custom-python-code.html
+https://pyodide.org/en/stable/development/building-packages-from-source.html
+https://pyodide.org/en/stable/development/building-from-sources.html
+https://github.com/pyodide/pyodide/issues/6177
+https://pyodide.org/en/stable/console.html
+https://pypi.org/project/pyodide-build/#history
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
