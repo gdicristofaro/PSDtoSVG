@@ -3,13 +3,14 @@ import { loadPyodide, type PyodideInterface } from 'pyodide';
 const BASE_PACKAGE_PATH = '/assets/pyodide/';
 // const MICROPIP = 'micropip-0.11.0-py3-none-any.whl';
 const PACKAGES = [
-      ['docopt', 'docopt-0.6.2-py2.py3-none-any.whl'],
-      // ['pillow', 'pillow-11.3.0-cp313-cp313-pyodide_2025_0_wasm32.whl'],
+      // ['docopt', 'docopt-0.6.2-py2.py3-none-any.whl'],
+      // ['pillow', 'pillow-11.3.0-cp313-cp313-emscripten_4_0_9_wasm32.whl'],
+      ['aggdraw', 'aggdraw-1.3.19-cp313-cp313-emscripten_4_0_9_wasm32.whl'],
       // ["psd-tools", 'psd_tools-1.16.0-cp313-cp313-pyodide_2025_0_wasm32.whl'],
       
-      ["psd-tools", 'psd_tools-1.16.0-cp313-cp313-emscripten_4_0_9_wasm32.whl'],
+      ["psd-tools", 'psd_tools-1.10.13-cp313-cp313-emscripten_4_0_9_wasm32.whl'],
       ['psdtosvg', 'psdtosvg-1.0.0-py3-none-any.whl'],
-      ['potrace', 'potrace-1.0.0-py3-none-any.whl'],
+      // ['potrace', 'potrace-1.0.0-py3-none-any.whl'],
 ];
 
 export async function loadPyodideAndPackages(): Promise<PyodideInterface> {
@@ -36,10 +37,16 @@ export async function runpython(pyodide: PyodideInterface, file: File): Promise<
   pyodide.FS.writeFile('data.psd', new Uint8Array(arrayBuffer));
   return pyodide.runPython(`
     #import psd_tools
-    import potrace
-    print(1 + 2)
-    #from psdtosvg import psd_file_to_svg
-    #psd_file_to_svg('data.psd')
+    #import potrace
+    #print(1 + 2)
+    from importlib.metadata import version
+
+    # Replace 'requests' with your package name
+    package_version = version('Pillow')
+    print(package_version)
+
+    from psdtosvg import psd_file_to_svg
+    psd_file_to_svg('data.psd')
 `) as string;
 }
 

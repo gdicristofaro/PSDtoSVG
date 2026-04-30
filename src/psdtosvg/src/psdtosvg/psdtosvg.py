@@ -11,7 +11,7 @@ import base64
 from io import BytesIO
 import re
 
-from potrace import Bitmap, process, get_svg_path
+from psdtosvg.potrace import Bitmap, process, get_svg_path
 
 
 def get_bitmap_arr(img_dat, width, height, alpha_channel):
@@ -77,7 +77,7 @@ def svg_converter(layer, id_num, get_dataurl=False):
     layer_id = str(re.sub(r'\W+', '', "%s_%d" % (layer.name, id_num)))
 
     pil_img.convert('RGBA')
-    img_dat = pil_img.get_flattened_data()
+    img_dat = pil_img.getdata()
 
     # cannot convert image or should be dataurl anyway, convert to image
     if len(img_dat[0]) < 4 or get_dataurl:
