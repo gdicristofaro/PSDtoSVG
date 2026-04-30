@@ -67,7 +67,6 @@ def svg_converter(layer, id_num, get_dataurl=False):
     img_dat = np.clip(psd_numpy * 255, 0, 255).astype('uint8')
     pixel_array = img_dat.reshape(-1, img_dat.shape[-1])
 
-    print("received " + str(pixel_array))
     layer_id = str(re.sub(r'\W+', '', "%s_%d" % (layer.name, id_num)))
 
     # cannot convert image or should be dataurl anyway, convert to image
