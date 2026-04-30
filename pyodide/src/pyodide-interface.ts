@@ -5,10 +5,11 @@ const BASE_PACKAGE_PATH = '/assets/pyodide/';
 const PACKAGES = [
       // ['docopt', 'docopt-0.6.2-py2.py3-none-any.whl'],
       // ['pillow', 'pillow-11.3.0-cp313-cp313-emscripten_4_0_9_wasm32.whl'],
-      ['aggdraw', 'aggdraw-1.3.19-cp313-cp313-emscripten_4_0_9_wasm32.whl'],
+      // ['aggdraw', 'aggdraw-1.3.19-cp313-cp313-emscripten_4_0_9_wasm32.whl'],
       // ["psd-tools", 'psd_tools-1.16.0-cp313-cp313-pyodide_2025_0_wasm32.whl'],
       
-      ["psd-tools", 'psd_tools-1.10.13-cp313-cp313-emscripten_4_0_9_wasm32.whl'],
+      ["psd-tools", 'psd_tools-1.16.0-cp313-cp313-emscripten_4_0_9_wasm32.whl'],
+      // ["psd-tools", 'psd_tools-1.10.13-cp313-cp313-emscripten_4_0_9_wasm32.whl'],
       ['psdtosvg', 'psdtosvg-1.0.0-py3-none-any.whl'],
       // ['potrace', 'potrace-1.0.0-py3-none-any.whl'],
 ];
