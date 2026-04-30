@@ -10,47 +10,37 @@ from psd_tools.api.layers import Group, Layer
 import base64
 from io import BytesIO
 import re
+import numpy as np
+from PIL import Image
 
 from psdtosvg.potrace import Bitmap, process, get_svg_path
 
 
-def get_bitmap_arr(img_dat, width, height, alpha_channel):
+def get_bitmap_arr(pixel_array, width, height, alpha_channel):
     """
     based on image data, creates a list where pixel is located at
     [x + width * y], the pixel is either true or false
-    :param img_dat: the image data as an array of colors
+    :param pixel_array: the image data as an array of colors
     :param width: the width of the image
     :param height: the height of the image
     :param alpha_channel: which index in the color item contains the alpha
     :returns: a list of pixels to be consumed by potrace
     """
-    data = [pixel[alpha_channel] > 0 for pixel in img_dat]
+    data = [pixel[alpha_channel] > 0 for pixel in pixel_array]
     return Bitmap(width, height, data)
 
 
-def avg_color(img_data):
+def avg_color(pixel_array):
     """
     gets the average color found in the image data
     :param img_data: the image data as an array of colors
     :returns: the average color found in the image
     """
-    red = 0
-    green = 0
-    blue = 0
-    total = 0
-    for px in img_data:
-        if px[3] <= 0:
-            continue
-
-        red += px[0]
-        green += px[1]
-        blue += px[2]
-        total += 1
-
+    avg = np.mean(pixel_array[pixel_array[:, 3] > 0], axis=0)
     return {
-        'red': red // total,
-        'green': green // total,
-        'blue': blue // total
+        'red': avg[0],
+        'green': avg[1],
+        'blue': avg[2]
     }
 
 
@@ -73,47 +63,48 @@ def svg_converter(layer, id_num, get_dataurl=False):
         return {}
 
     # get alpha channel
-    pil_img = layer.numpy()
+    psd_numpy = layer.numpy()
+    img_dat = np.clip(psd_numpy * 255, 0, 255).astype('uint8')
+    pixel_array = img_dat.reshape(-1, img_dat.shape[-1])
+
+    print("received " + str(pixel_array))
     layer_id = str(re.sub(r'\W+', '', "%s_%d" % (layer.name, id_num)))
-    print("pil_img" + str(pil_img.shape))
 
-    # pil_img.convert('RGBA')
-    # img_dat = pil_img.get_flattened_data()
-    return {}
+    # cannot convert image or should be dataurl anyway, convert to image
+    if len(img_dat[0]) < 4 or get_dataurl:
+        # taken from https://stackoverflow.com/questions/42503995/
+        # how-to-get-a-pil-image-as-a-base64-encoded-string/42504858
+        buffer = BytesIO()
+        
+        image = Image.fromarray(img_dat, 'RGBA')
+        image.save(buffer, format="PNG")
+        buffer.seek(0)
+        img_bytes = buffer.read()
+        base64_bytes = base64.b64encode(img_bytes)
+        base64_str = base64_bytes.decode('ascii')
+        # print("base64 is " + base64_str[:30] + "... (" + str(len(base64_str)) + " characters)")
 
-    # # cannot convert image or should be dataurl anyway, convert to image
-    # if len(img_dat[0]) < 4 or get_dataurl:
-    #     # taken from https://stackoverflow.com/questions/42503995/
-    #     # how-to-get-a-pil-image-as-a-base64-encoded-string/42504858
-    #     buffer = BytesIO()
-    #     pil_img.save(buffer, format="PNG")
-    #     buffer.seek(0)
-    #     img_bytes = buffer.read()
-    #     base64_bytes = base64.b64encode(img_bytes)
-    #     base64_str = base64_bytes.decode('ascii')
-    #     print("base64 is " + base64_str[:30] + "... (" + str(len(base64_str)) + " characters)")
+        # base64 string from https://en.wikipedia.org/wiki/wiki/Data_URI_scheme
+        return {
+            'image': "data:image/png;base64," + base64_str,
+            'x': x_offset,
+            'y': y_offset,
+            'width': width,
+            'height': height,
+            'id': layer_id
+        }
+    else:
+        # create array to analyze with pypotrace
+        po_data = get_bitmap_arr(pixel_array, width, height, 3)
+        pathlist = [get_svg_path(p.curve, x_offset, y_offset)
+                    for p in process(po_data, optcurve=False)]
+        joined_paths = ' '.join(pathlist)
 
-    #     # base64 string from https://en.wikipedia.org/wiki/wiki/Data_URI_scheme
-    #     return {
-    #         'image': "data:image/png;base64," + base64_str,
-    #         'x': x_offset,
-    #         'y': y_offset,
-    #         'width': width,
-    #         'height': height,
-    #         'id': layer_id
-    #     }
-
-    # # create array to analyze with pypotrace
-    # po_data = get_bitmap_arr(img_dat, width, height, 3)
-    # pathlist = [get_svg_path(p.curve, x_offset, y_offset)
-    #             for p in process(po_data, optcurve=False)]
-    # joined_paths = ' '.join(pathlist)
-
-    return {
-        'svg_paths': joined_paths,
-        'color': avg_color(img_dat),
-        'id': layer_id
-    }
+        return {
+            'svg_paths': joined_paths,
+            'color': avg_color(pixel_array),
+            'id': layer_id
+        }
 
 
 def gather_layers(item):
@@ -224,7 +215,8 @@ def psd_file_to_svg(psd_path):
     :returns: the svg string
     """
     psd = PSDImage.open(psd_path)
-    return psd_to_svg(psd)
+    svg = psd_to_svg(psd)
+    return svg
 
 
 def psd_stream_to_svg(psd_stream):

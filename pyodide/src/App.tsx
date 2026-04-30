@@ -18,6 +18,7 @@ interface PlaygroundState {
 const App: React.FC = () => {
   const [activeSection, setActiveSection] = useState<string>('convert');
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
+  const [processedSvg, setProcessedSvg] = useState<string | undefined>(undefined);
   const [uploadedFile] = useState<string | null>(null);
   
   const [playgroundState, setPlaygroundState] = useState<PlaygroundState>({
@@ -66,6 +67,7 @@ const App: React.FC = () => {
       // Mock result for visualization
       loadAndRun(file).then(svgString => {
         console.log(svgString);
+        setProcessedSvg(svgString);
       }).catch(err => {
         console.error("Error processing PSD file:", err);
       });
@@ -124,11 +126,9 @@ const App: React.FC = () => {
           <h2 className="text-4xl font-extrabold mb-8 text-slate-800">Convert</h2>
           <div className="bg-white rounded-3xl shadow-xl p-10 flex flex-col items-center border border-slate-100">
             <div className="w-full max-w-sm aspect-square bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 flex items-center justify-center mb-8 overflow-hidden relative">
-              {uploadedFile ? (
+              {processedSvg ? (
                 <div className="p-8 w-full h-full flex items-center justify-center">
-                   <svg viewBox="0 0 100 100" className="w-full h-full text-indigo-500 fill-current">
-                     <circle cx="50" cy="50" r="40" />
-                   </svg>
+                  <img src={`data:image/svg+xml;utf8,${encodeURIComponent(processedSvg)}`} />
                 </div>
               ) : (
                 <p className="text-slate-400 font-medium">SVG Preview Area</p>

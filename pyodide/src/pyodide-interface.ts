@@ -36,22 +36,14 @@ export async function loadPyodideAndPackages(): Promise<PyodideInterface> {
 export async function runpython(pyodide: PyodideInterface, file: File): Promise<string>  {
   const arrayBuffer = await file.arrayBuffer();
   pyodide.FS.writeFile('data.psd', new Uint8Array(arrayBuffer));
-  return pyodide.runPython(`
-    #import psd_tools
-    #import potrace
-    #print(1 + 2)
-    from importlib.metadata import version
-
-    # Replace 'requests' with your package name
-    package_version = version('Pillow')
-    print(package_version)
-
+  const svg = await pyodide.runPythonAsync(`
     from psdtosvg import psd_file_to_svg
     psd_file_to_svg('data.psd')
-`) as string;
+`);
+  return svg;
 }
 
 export async function loadAndRun(file: File) {
   const pyodide = await loadPyodideAndPackages();
-  runpython(pyodide, file);
+  return await runpython(pyodide, file);
 }
