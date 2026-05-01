@@ -1,6 +1,6 @@
 import { loadPyodide, type PyodideInterface } from 'pyodide';
 
-const BASE_PACKAGE_PATH = '/assets/pyodide/';
+const BASE_PACKAGE_PATH = './assets/pyodide/';
 
 async function loadPyodideAndPackages(): Promise<PyodideInterface> {
   const pyodide = await loadPyodide({
