@@ -1,6 +1,7 @@
 import {
   ArrowDownIcon,
   ArrowUpTrayIcon,
+  ChevronDownIcon,
   CommandLineIcon,
   PlayIcon
 } from '@heroicons/react/16/solid';
@@ -16,6 +17,7 @@ import {
   type PlaygroundState,
   updatePlaygroundState
 } from '../services/svg-playground.service';
+import YoutubeEmbed from './YoutubeEmbed';
 
 const App: React.FC = () => {
   const [activeSection, setActiveSection] = useState<string>('convert');
@@ -28,6 +30,19 @@ const App: React.FC = () => {
   const [playgroundState, setPlaygroundState] = useState<PlaygroundState>(
     initialPlaygroundState
   );
+
+  const [expandedCards, setExpandedCards] = useState({
+    dashArray: true,
+    sliders: true,
+    color: false
+  });
+
+  const toggleCard = (card: 'dashArray' | 'sliders' | 'color') => {
+    setExpandedCards((prev) => ({
+      ...prev,
+      [card]: !prev[card]
+    }));
+  };
 
   // Intersection Observer for Scroll-Spy
   useEffect(() => {
@@ -89,9 +104,7 @@ const App: React.FC = () => {
     field: keyof PlaygroundState,
     value: string | number
   ): void => {
-    setPlaygroundState((prev) =>
-      updatePlaygroundState(prev, field, value)
-    );
+    setPlaygroundState((prev) => updatePlaygroundState(prev, field, value));
   };
 
   const navItems = [
@@ -210,13 +223,7 @@ const App: React.FC = () => {
         <div className="max-w-5xl w-full px-6 text-center">
           <h2 className="text-4xl font-extrabold mb-8 text-slate-800">Learn</h2>
           <div className="aspect-video w-full rounded-3xl overflow-hidden shadow-2xl border-8 border-slate-50">
-            <iframe
-              className="w-full h-full"
-              src="https://www.youtube.com/embed/5OeyH-UHewI"
-              title="D3.js Tutorial"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
+                <YoutubeEmbed />
           </div>
         </div>
       </section>
@@ -232,9 +239,7 @@ const App: React.FC = () => {
           </h2>
           <div className="grid lg:grid-cols-2 gap-10">
             <div className="bg-white rounded-3xl shadow-lg p-8 border border-slate-100 flex flex-col items-center w-full h-full">
-              <div
-                className="w-full aspect-square bg-slate-50 rounded-2xl flex items-center justify-center mb-8"
-              >
+              <div className="w-full aspect-square bg-slate-50 rounded-2xl flex items-center justify-center mb-8">
                 <AnimateGraphic />
               </div>
               <button
@@ -257,7 +262,7 @@ const App: React.FC = () => {
                 </div>
               </div>
               <div className="flex-[1_1_0] pl-8 pr-8 pb-4 border-b border-slate-800 leading-relaxed overflow-auto">
-                <AnimateCodeSnippet/>
+                <AnimateCodeSnippet />
               </div>
             </div>
           </div>
@@ -274,116 +279,180 @@ const App: React.FC = () => {
             Playground
           </h2>
           <div className="grid lg:grid-cols-12 gap-8">
-            <div className="lg:col-span-7 bg-slate-50 rounded-[2.5rem] p-12 flex items-center justify-center shadow-inner border border-slate-100">
-              <div className="transition-transform duration-300 ease-out">
-                <PlaygroundGraphic playgroundState={playgroundState}  />
-                </div>
-                  </div>
+            <div className="lg:col-span-7 bg-slate-50 rounded-[2.5rem] flex items-center justify-center shadow-inner border border-slate-100 p-8">
+              <div className="transition-transform duration-300 ease-out grow">
+                <PlaygroundGraphic playgroundState={playgroundState} />
+              </div>
+            </div>
 
-            <div className="lg:col-span-5 space-y-6">
-              <div className="bg-slate-50 p-8 rounded-3xl border border-slate-100">
-                <p className="font-bold mb-5 text-slate-700 uppercase tracking-tight">
-                  Dash Array Pattern
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {['None', 'Small', 'Medium', 'Large'].map((label, idx) => (
-                    <label
-                      key={label}
-                      className={`flex flex-wrap items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all cursor-pointer ${playgroundState.dashArray === label.toLocaleLowerCase() ? 'bg-indigo-600 border-indigo-600 text-white' : 'bg-white border-slate-100 text-slate-500 hover:border-indigo-200'}`}
-                    >
-                      <input
-                        type="radio"
-                        className="hidden"
-                        value={idx}
-                        checked={
-                          playgroundState.dashArray ===
-                          label.toLocaleLowerCase()
-                        }
-                        onChange={() =>
-                          updatePlayground(
-                            'dashArray',
+            <div className="lg:col-span-5 space-y-4">
+              <div className="bg-slate-50 p-4 rounded-3xl border border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => toggleCard('dashArray')}
+                  className="w-full flex items-center justify-between gap-3 mb-5 text-left"
+                >
+                  <p className="font-bold text-slate-700 uppercase tracking-tight">
+                    Dash Array Pattern
+                  </p>
+                  <ChevronDownIcon
+                    className={`w-5 h-5 text-slate-500 transition-transform ${
+                      expandedCards.dashArray ? 'rotate-180' : 'rotate-0'
+                    }`}
+                  />
+                </button>
+                <div
+                  className={`overflow-hidden transition-all duration-300 ${
+                    expandedCards.dashArray ? 'max-h-[1000px]' : 'max-h-0'
+                  }`}
+                >
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {['None', 'Small', 'Medium', 'Large'].map((label, idx) => (
+                      <label
+                        key={label}
+                        className={`flex flex-wrap items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all cursor-pointer ${playgroundState.dashArray === label.toLocaleLowerCase() ? 'bg-indigo-600 border-indigo-600 text-white' : 'bg-white border-slate-100 text-slate-500 hover:border-indigo-200'}`}
+                      >
+                        <input
+                          type="radio"
+                          className="hidden"
+                          value={idx}
+                          checked={
+                            playgroundState.dashArray ===
                             label.toLocaleLowerCase()
-                          )
-                        }
-                      />
-                      <span className="text-sm font-bold">{label}</span>
-                    </label>
-                  ))}
+                          }
+                          onChange={() =>
+                            updatePlayground(
+                              'dashArray',
+                              label.toLocaleLowerCase()
+                            )
+                          }
+                        />
+                        <span className="text-sm font-bold">{label}</span>
+                      </label>
+                    ))}
+                  </div>
                 </div>
               </div>
 
-              <div className="bg-slate-50 p-8 rounded-3xl border border-slate-100 space-y-6">
-                {[
-                  {
-                    label: 'Global Scale',
-                    key: 'scale' as const,
-                    min: 0,
-                    max: 1,
-                    step: 0.1
-                  },
-                  {
-                    label: 'Stroke Width',
-                    key: 'strokeWidth' as const,
-                    min: 0,
-                    max: 10
-                  },
-                  {
-                    label: 'Fill Opacity',
-                    key: 'fillOpacity' as const,
-                    min: 0,
-                    max: 100
-                  },
-                  {
-                    label: 'Stroke Opacity',
-                    key: 'strokeOpacity' as const,
-                    min: 0,
-                    max: 100
-                  }
-                ].map((s) => (
-                  <div key={s.key}>
-                    <div className="flex justify-between text-xs font-black text-slate-400 uppercase mb-2">
-                      <span>{s.label}</span>
-                      <span className="text-indigo-600">
-                        {playgroundState[s.key]}
-                      </span>
-                    </div>
-                    <input
-                      type="range"
-                      min={s.min}
-                      max={s.max}
-                      step={s.step ?? 1}
-                      value={playgroundState[s.key]}
-                      onChange={(e) => updatePlayground(s.key, e.target.value)}
-                      className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
-                    />
+              <div className="bg-slate-50 p-4 rounded-3xl border border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => toggleCard('sliders')}
+                  className="w-full flex items-center justify-between gap-3 mb-5 text-left"
+                >
+                  <p className="font-bold text-slate-700 uppercase tracking-tight">
+                    Controls
+                  </p>
+                  <ChevronDownIcon
+                    className={`w-5 h-5 text-slate-500 transition-transform ${
+                      expandedCards.sliders ? 'rotate-180' : 'rotate-0'
+                    }`}
+                  />
+                </button>
+                <div
+                  className={`overflow-hidden transition-all duration-300 ${
+                    expandedCards.sliders ? 'max-h-[2000px]' : 'max-h-0'
+                  }`}
+                >
+                  <div className="space-y-2">
+                    {[
+                      {
+                        label: 'Global Scale',
+                        key: 'scale' as const,
+                        min: 0,
+                        max: 1,
+                        step: 0.1
+                      },
+                      {
+                        label: 'Stroke Width',
+                        key: 'strokeWidth' as const,
+                        min: 0,
+                        max: 10
+                      },
+                      {
+                        label: 'Fill Opacity',
+                        key: 'fillOpacity' as const,
+                        min: 0,
+                        max: 100
+                      },
+                      {
+                        label: 'Stroke Opacity',
+                        key: 'strokeOpacity' as const,
+                        min: 0,
+                        max: 100
+                      }
+                    ].map((s) => (
+                      <div key={s.key}>
+                        <div className="flex justify-between text-xs font-black text-slate-400 uppercase mb-2">
+                          <span>{s.label}</span>
+                          <span className="text-indigo-600">
+                            {playgroundState[s.key]}
+                          </span>
+                        </div>
+                        <input
+                          type="range"
+                          min={s.min}
+                          max={s.max}
+                          step={s.step ?? 1}
+                          value={playgroundState[s.key]}
+                          onChange={(e) =>
+                            updatePlayground(s.key, e.target.value)
+                          }
+                          className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+                        />
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
               </div>
 
-              <div className="bg-slate-900 p-8 rounded-3xl space-y-5 shadow-xl">
-                <p className="text-white font-bold text-xs uppercase tracking-widest mb-2 opacity-50">
-                  Color Mapping
-                </p>
-                {['Door', 'Tire', 'Hood', 'Lights', 'Window'].map((part) => {
-                  const key =
-                    `${part.toLowerCase()}Color` as keyof PlaygroundState;
-                  return (
-                    <div key={key}>
-                      <input
-                        type="range"
-                        min="0"
-                        max="1"
-                        step="0.01"
-                        value={playgroundState[key] as number}
-                        onChange={(e) => updatePlayground(key, e.target.value)}
-                        className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-400"
-                      />
-                      <span className="text-[10px] text-slate-500 font-bold uppercase">
-                        {part} HUE
-                      </span>
-                    </div>
-                  );
-                })}
+              <div className="bg-slate-900 p-4 rounded-3xl shadow-xl">
+                <button
+                  type="button"
+                  onClick={() => toggleCard('color')}
+                  className="w-full flex items-center justify-between gap-3 mb-5 text-left"
+                >
+                  <p className="text-white font-bold text-xs uppercase tracking-widest">
+                    Color Mapping
+                  </p>
+                  <ChevronDownIcon
+                    className={`w-5 h-5 text-slate-300 transition-transform ${
+                      expandedCards.color ? 'rotate-180' : 'rotate-0'
+                    }`}
+                  />
+                </button>
+                <div
+                  className={`overflow-hidden transition-all duration-300 ${
+                    expandedCards.color ? 'max-h-[1400px]' : 'max-h-0'
+                  }`}
+                >
+                  <div className="space-y-2">
+                    {['Door', 'Tire', 'Hood', 'Lights', 'Window'].map(
+                      (part) => {
+                        const key =
+                          `${part.toLowerCase()}Color` as keyof PlaygroundState;
+                        return (
+                          <div key={key}>
+                            <input
+                              type="range"
+                              min="0"
+                              max="1"
+                              step="0.01"
+                              value={playgroundState[key] as number}
+                              onChange={(e) =>
+                                updatePlayground(key, e.target.value)
+                              }
+                              className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-400"
+                            />
+                            <span className="text-[10px] text-slate-500 font-bold uppercase">
+                              {part} HUE
+                            </span>
+                          </div>
+                        );
+                      }
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
