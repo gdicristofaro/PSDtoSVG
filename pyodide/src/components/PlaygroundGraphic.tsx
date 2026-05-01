@@ -4,7 +4,7 @@ import {
   getColor,
   getDash,
   getScale
-} from './svg-playground.service';
+} from '../services/svg-playground.service';
 
 interface PlaygroundGraphicProps {
   playgroundState: PlaygroundState;

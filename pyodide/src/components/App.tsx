@@ -5,9 +5,9 @@ import {
   PlayIcon
 } from '@heroicons/react/16/solid';
 import React, { useState, useEffect, type ChangeEvent } from 'react';
-import { loadAndRun } from './svg-generate.service.pyodide';
+import { loadAndRun } from '../services/svg-generate.service.pyodide';
 import { saveAs } from 'file-saver-es';
-import { runAnimation as runSvgAnimation } from './svg-animation.service';
+import { runAnimation as runSvgAnimation } from '../services/svg-animation.service';
 import AnimateGraphic from './AnimateGraphic';
 import AnimateCodeSnippet from './AnimateCodeSnippet';
 import PlaygroundGraphic from './PlaygroundGraphic';
@@ -15,7 +15,7 @@ import {
   initialPlaygroundState,
   type PlaygroundState,
   updatePlaygroundState
-} from './svg-playground.service';
+} from '../services/svg-playground.service';
 
 const App: React.FC = () => {
   const [activeSection, setActiveSection] = useState<string>('convert');
@@ -137,7 +137,7 @@ const App: React.FC = () => {
             Convert
           </h2>
           <div className="bg-white rounded-3xl shadow-xl p-10 flex flex-col items-center border border-slate-100">
-            <div className="w-full max-w-sm aspect-square bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 flex items-center justify-center mb-8 overflow-hidden relative">
+            <div className="w-full max-w-lg aspect-square bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 flex items-center justify-center mb-8 overflow-hidden relative">
               {processing ? (
                 <div className="flex items-center justify-center">
                   <svg
