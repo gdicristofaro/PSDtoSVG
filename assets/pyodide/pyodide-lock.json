@@ -1,0 +1,99 @@
+{
+  "info": {
+    "abi_version": "2025_0",
+    "arch": "wasm32",
+    "platform": "emscripten_4_0_9",
+    "python": "3.13.2",
+    "version": "0.28.0.dev0"
+  },
+  "packages": {
+    "attrs": {
+      "depends": ["six"],
+      "file_name": "attrs-25.2.0-py3-none-any.whl",
+      "imports": ["attr", "attrs"],
+      "install_dir": "site",
+      "name": "attrs",
+      "package_type": "package",
+      "sha256": "0ca0ca2b0dbc02f198a7134fb09c26598dc50390439b318d6dfb63adaee97b25",
+      "unvendored_tests": false,
+      "version": "25.2.0"
+    },
+    "micropip": {
+      "depends": [],
+      "file_name": "micropip-0.11.0-py3-none-any.whl",
+      "imports": ["micropip"],
+      "install_dir": "site",
+      "name": "micropip",
+      "package_type": "package",
+      "sha256": "0ae422514e45d068b8159eb8ec3b2c3f4cbce2e664e26cb81735dbe4af2377a1",
+      "unvendored_tests": false,
+      "version": "0.11.0"
+    },
+    "numpy": {
+      "depends": [],
+      "file_name": "numpy-2.2.5-cp313-cp313-pyodide_2025_0_wasm32.whl",
+      "imports": ["numpy"],
+      "install_dir": "site",
+      "name": "numpy",
+      "package_type": "package",
+      "sha256": "6eaab6a7bb658d71ebe702911a3deab715323642462eb41b65565ca6a7cc23f1",
+      "unvendored_tests": false,
+      "version": "2.2.5"
+    },
+    "pillow": {
+      "depends": [],
+      "file_name": "pillow-11.3.0-cp313-cp313-pyodide_2025_0_wasm32.whl",
+      "imports": ["PIL"],
+      "install_dir": "site",
+      "name": "Pillow",
+      "package_type": "package",
+      "sha256": "7e1168616481f685f277d7fad1d197f3a625540542a2cd292cdc8958ab083d6e",
+      "unvendored_tests": false,
+      "version": "11.3.0"
+    },
+        "psd-tools": {
+      "depends": ["typing-extensions", "attrs", "Pillow", "numpy"],
+      "file_name": "psd_tools-1.16.0-cp313-cp313-emscripten_4_0_9_wasm32.whl",
+      "imports": ["psd_tools"],
+      "install_dir": "site",
+      "name": "psd-tools",
+      "package_type": "package",
+      "sha256": "cc55d0370ae938c0dcf28666e65a4a378ca7389e7dc16bd57f05efb3b06a0fbb ",
+      "unvendored_tests": false,
+      "version": "1.16.0"
+    },
+    "psdtosvg": {
+      "depends": ["psd-tools"],
+      "file_name": "psdtosvg-1.0.0-py3-none-any.whl",
+      "imports": ["psdtosvg"],
+      "install_dir": "site",
+      "name": "psdtosvg",
+      "package_type": "package",
+      "sha256": "a87e781bc115038fb3c1da7ab0738b28a6aeeca3c446633a178cbe7a87237d44",
+      "unvendored_tests": false,
+      "version": "1.0.0"
+    },
+    "six": {
+      "depends": [],
+      "file_name": "six-1.17.0-py2.py3-none-any.whl",
+      "imports": ["six"],
+      "install_dir": "site",
+      "name": "six",
+      "package_type": "package",
+      "sha256": "1f715fc699e802b31e53290ead6c16a4d6a8da462a225d2e06097fce45ab70b9",
+      "unvendored_tests": false,
+      "version": "1.17.0"
+    },
+    "typing-extensions": {
+      "depends": [],
+      "file_name": "typing_extensions-4.15.0-py3-none-any.whl",
+      "imports": ["typing_extensions"],
+      "install_dir": "site",
+      "name": "typing-extensions",
+      "package_type": "package",
+      "sha256": "b57583f623dd3df72e6ace8a4061c3e4f0683755165ef73b4cd44ac3df92ddb9",
+      "unvendored_tests": false,
+      "version": "4.15.0"
+    }
+  }
+}
