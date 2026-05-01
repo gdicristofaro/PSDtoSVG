@@ -69,7 +69,7 @@
       "install_dir": "site",
       "name": "psdtosvg",
       "package_type": "package",
-      "sha256": "f13f3808d5bae318eb4940eae4644743072d7b5cd4594443ba53bdf3920e3e25",
+      "sha256": "a87e781bc115038fb3c1da7ab0738b28a6aeeca3c446633a178cbe7a87237d44",
       "unvendored_tests": false,
       "version": "1.0.0"
     },
