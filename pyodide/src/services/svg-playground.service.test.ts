@@ -14,7 +14,7 @@ describe('svg-playground.service', () => {
       scale: 0,
       fillOpacity: 50,
       strokeOpacity: 80,
-      strokeWidth: 2,
+      strokeWidth: 5,
       doorColor: 1,
       tireColor: 0.8,
       hoodColor: 0.6,

@@ -6,14 +6,4 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   base: '/PSDtoSVG/',
-  test: {
-    globals: true,
-    environment: 'happy-dom',
-    include: ['src/**/*.test.ts'],
-    server: {
-      deps: {
-        inline: ['d3']
-      }
-    }
-  }
 });
