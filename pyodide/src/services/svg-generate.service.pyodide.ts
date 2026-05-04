@@ -28,7 +28,7 @@ async function runpython(pyodide: PyodideInterface, file: File): Promise<string>
 let PYODIDE_INSTANCE: PyodideInterface | null = null;
 let PYODIDE_LOADING_PROMISE: Promise<PyodideInterface> | null = null;
 
-export async function loadAndRun(file: File) {
+export async function processFile(file: File) {
   if (!PYODIDE_INSTANCE) {
     if (!PYODIDE_LOADING_PROMISE) {
       PYODIDE_LOADING_PROMISE = loadPyodideAndPackages();

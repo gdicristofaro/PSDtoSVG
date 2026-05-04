@@ -6,7 +6,6 @@ import {
   PlayIcon
 } from '@heroicons/react/16/solid';
 import React, { useState, useEffect, type ChangeEvent } from 'react';
-import { loadAndRun } from '../services/svg-generate.service.pyodide';
 import { saveAs } from 'file-saver-es';
 import { runAnimation as runSvgAnimation } from '../services/svg-animation.service';
 import AnimateGraphic from './AnimateGraphic';
@@ -18,6 +17,7 @@ import {
   updatePlaygroundState
 } from '../services/svg-playground.service';
 import YoutubeEmbed from './YoutubeEmbed';
+import { processFile } from '../services/svg-generate.service';
 
 const App: React.FC = () => {
   const [activeSection, setActiveSection] = useState<string>('convert');
@@ -74,22 +74,21 @@ const App: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
-  const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setProcessing(true);
-      loadAndRun(file)
-        .then((svgString) => {
-          setProcessedSvg({
-            fileName: file.name.replace(/\.psd$/i, '') + '.svg',
-            svgString
-          });
-          setProcessing(false);
-        })
-        .catch((err) => {
-          console.error('Error processing PSD file:', err);
-          setProcessing(false);
+      try {
+        const svgString = await processFile(file);
+        setProcessedSvg({
+          fileName: file.name.replace(/\.psd$/i, '') + '.svg',
+          svgString
         });
+      } catch (err) {
+        console.error('Error processing PSD file:', err);
+      } finally {
+        setProcessing(false);
+      }
     }
   };
 

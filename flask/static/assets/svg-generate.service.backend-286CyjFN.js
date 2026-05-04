@@ -1,0 +1,1 @@
+async function e(e){let t=new FormData;t.append(`psd_file`,e);let n=await fetch(`/api/v1/upload`,{method:`POST`,body:t});if(!n.ok)throw Error(`Upload failed with status ${n.status}`);return await n.text()}export{e as processFile};

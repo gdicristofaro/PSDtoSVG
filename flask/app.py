@@ -1,24 +1,23 @@
 from psd_tools import PSDImage
-from flask import Flask, render_template, abort, request, Response
+from flask import Flask, redirect, send_from_directory, abort, request, Response
 from psdtosvg.psdtosvg import psd_to_svg
 
 
-app = Flask(__name__)
- 
-@app.route("/")
-def index():
-    return render_template('index.html')
+app = Flask(__name__, static_url_path='/PSDtoSVG', static_folder='static')
 
-@app.route("/svgmanipulator.html")
-def manipulator():
-    return render_template('svgmanipulator.html')
+@app.route('/')
+def root_redirect():
+    '''Redirect the root URL to the /PSDtoSVG index page.'''
+    return redirect('/PSDtoSVG')
 
-@app.route("/animations.html")
-def animations():
-    return render_template('animations.html')
+@app.route('/PSDtoSVG')
+def serve_psdtosvg_index():
+    '''Serve the index.html file for the /PSDtoSVG route.'''
+    return send_from_directory('static', 'index.html')
 
-@app.route("/upload", methods=['POST'])
+@app.route("/api/v1/upload", methods=['POST'])
 def upload_file():
+    '''Handle file upload and convert PSD to SVG.'''
     try:
         psd_file = request.files['psd_file'].stream
         psd = PSDImage.open(psd_file)
