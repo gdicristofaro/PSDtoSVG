@@ -143,7 +143,7 @@ const App: React.FC = () => {
       {/* Convert Section */}
       <section
         id="convert"
-        className="pt-24 min-h-screen bg-slate-50 flex flex-col items-center"
+        className="-mt-14 pt-24 min-h-screen bg-slate-50 flex flex-col items-center"
       >
         <div className="max-w-4xl w-full px-6">
           <h2 className="text-4xl font-extrabold mb-8 text-slate-800">
