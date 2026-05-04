@@ -58,7 +58,7 @@ const App: React.FC = () => {
 
     const observerOptions: IntersectionObserverInit = {
       root: null,
-      threshold: 0.6
+      threshold: 0.2
     };
 
     const observer = new IntersectionObserver(
@@ -117,9 +117,9 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen font-sans text-slate-900 scroll-smooth">
       {/* Navigation Bar */}
-      <nav className="fixed top-0 w-full bg-white/90 backdrop-blur-md shadow-sm z-50">
+      <nav className="sticky top-0 w-full bg-white/90 backdrop-blur-md shadow-sm z-50">
         <div className="max-w-6xl mx-auto px-6 py-3 flex flex-wrap items-center justify-between gap-4">
-          <div className="font-bold text-xl tracking-tight text-indigo-600">
+          <div className="hidden sm:block font-bold text-xl tracking-tight text-indigo-600">
             PSD to SVG
           </div>
           <div className="flex flex-wrap gap-4">
@@ -143,13 +143,13 @@ const App: React.FC = () => {
       {/* Convert Section */}
       <section
         id="convert"
-        className="min-h-screen bg-slate-50 flex flex-col items-center justify-center"
+        className="pt-24 min-h-screen bg-slate-50 flex flex-col"
       >
         <div className="max-w-4xl w-full px-6">
           <h2 className="text-4xl font-extrabold mb-8 text-slate-800">
             Convert
           </h2>
-          <div className="bg-white rounded-3xl shadow-xl p-10 flex flex-col items-center border border-slate-100">
+          <div className="max-content-height bg-white rounded-3xl shadow-xl p-10 flex flex-col items-center border border-slate-100">
             <div className="w-full max-w-lg aspect-square bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 flex items-center justify-center mb-8 overflow-hidden relative">
               {processing ? (
                 <div className="flex items-center justify-center">
@@ -174,8 +174,8 @@ const App: React.FC = () => {
                   </svg>
                 </div>
               ) : processedSvg ? (
-                <div className="p-8 w-full h-full flex items-center justify-center">
-                  <img
+                <div className="p-8 flex w-full h-full items-center justify-center">
+                  <img className="max-h-full max-w-full" alt="Processed SVG"
                     src={`data:image/svg+xml;utf8,${encodeURIComponent(processedSvg.svgString)}`}
                   />
                 </div>
@@ -218,11 +218,11 @@ const App: React.FC = () => {
       {/* Learn Section */}
       <section
         id="learn"
-        className="min-h-screen pt-24 pb-12 bg-white flex flex-col items-center justify-center"
+        className="min-h-screen pt-24 pb-12 bg-white flex flex-col"
       >
-        <div className="max-w-5xl w-full px-6 text-center">
+        <div className="max-w-5xl w-full px-6">
           <h2 className="text-4xl font-extrabold mb-8 text-slate-800">Learn</h2>
-          <div className="aspect-video w-full rounded-3xl overflow-hidden shadow-2xl border-8 border-slate-50">
+          <div className="max-content-height aspect-video w-full rounded-3xl overflow-hidden shadow-2xl border-8 border-slate-50">
                 <YoutubeEmbed />
           </div>
         </div>
@@ -231,21 +231,21 @@ const App: React.FC = () => {
       {/* Animate Section */}
       <section
         id="animate"
-        className="min-h-screen pt-24 pb-12 bg-slate-50 flex flex-col items-center justify-center"
+        className="min-h-screen pt-24 pb-12 bg-slate-50 flex flex-col"
       >
         <div className="max-w-6xl w-full px-6">
           <h2 className="text-4xl font-extrabold mb-8 text-slate-800">
             Animate
           </h2>
           <div className="grid lg:grid-cols-2 gap-10">
-            <div className="bg-white rounded-3xl shadow-lg p-8 border border-slate-100 flex flex-col items-center w-full h-full">
-              <div className="w-full aspect-square bg-slate-50 rounded-2xl flex items-center justify-center mb-8">
+            <div className="bg-white rounded-3xl shadow-lg p-8 border border-slate-100 flex flex-col items-center w-full flex flex-column max-content-height">
+              <div className="w-full grow aspect-square bg-slate-50 rounded-2xl flex items-center justify-center mb-8 min-h-0">
                 <AnimateGraphic />
               </div>
               <button
                 onClick={runAnimation}
                 disabled={isAnimating}
-                className="w-full flex items-center justify-center gap-3 bg-indigo-600 text-white px-8 py-4 rounded-xl hover:bg-indigo-700 transition-all disabled:opacity-50 font-bold"
+                className="w-full flex-none flex items-center justify-center gap-3 bg-indigo-600 text-white px-8 py-4 rounded-xl hover:bg-indigo-700 transition-all disabled:opacity-50 font-bold"
               >
                 <PlayIcon className="size-6" />
                 {isAnimating ? 'Animating...' : 'Run D3 Script'}
@@ -272,15 +272,15 @@ const App: React.FC = () => {
       {/* Playground Section */}
       <section
         id="playground"
-        className="min-h-screen pt-24 pb-20 bg-white flex flex-col items-center justify-center"
+        className="min-h-screen pt-24 pb-20 bg-white flex flex-col"
       >
         <div className="max-w-6xl w-full px-6">
           <h2 className="text-4xl font-extrabold mb-12 text-slate-800">
             Playground
           </h2>
           <div className="grid lg:grid-cols-12 gap-8">
-            <div className="lg:col-span-7 bg-slate-50 rounded-[2.5rem] flex items-center justify-center shadow-inner border border-slate-100 p-8">
-              <div className="transition-transform duration-300 ease-out grow">
+            <div className="lg:col-span-7 bg-slate-50 rounded-[2.5rem] max-content-height flex items-center justify-center shadow-inner border border-slate-100 p-8">
+              <div className="flex grow min-h-0 h-full items-center justify-center transition-transform duration-300 ease-out grow">
                 <PlaygroundGraphic playgroundState={playgroundState} />
               </div>
             </div>

@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+:root {
+    --navheight: 52px;
+}
+
+.max-content-height {
+    max-height: calc(95dvh - var(--navheight));
+}
