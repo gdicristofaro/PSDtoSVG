@@ -143,7 +143,7 @@ const App: React.FC = () => {
       {/* Convert Section */}
       <section
         id="convert"
-        className="pt-24 min-h-screen bg-slate-50 flex flex-col"
+        className="pt-24 min-h-screen bg-slate-50 flex flex-col items-center"
       >
         <div className="max-w-4xl w-full px-6">
           <h2 className="text-4xl font-extrabold mb-8 text-slate-800">
@@ -218,7 +218,7 @@ const App: React.FC = () => {
       {/* Learn Section */}
       <section
         id="learn"
-        className="min-h-screen pt-24 pb-12 bg-white flex flex-col"
+        className="min-h-screen pt-24 pb-12 bg-white flex flex-col items-center"
       >
         <div className="max-w-5xl w-full px-6">
           <h2 className="text-4xl font-extrabold mb-8 text-slate-800">Learn</h2>
@@ -231,7 +231,7 @@ const App: React.FC = () => {
       {/* Animate Section */}
       <section
         id="animate"
-        className="min-h-screen pt-24 pb-12 bg-slate-50 flex flex-col"
+        className="min-h-screen pt-24 pb-12 bg-slate-50 flex flex-col items-center"
       >
         <div className="max-w-6xl w-full px-6">
           <h2 className="text-4xl font-extrabold mb-8 text-slate-800">
@@ -272,7 +272,7 @@ const App: React.FC = () => {
       {/* Playground Section */}
       <section
         id="playground"
-        className="min-h-screen pt-24 pb-20 bg-white flex flex-col"
+        className="min-h-screen pt-24 pb-20 bg-white flex flex-col items-center"
       >
         <div className="max-w-6xl w-full px-6">
           <h2 className="text-4xl font-extrabold mb-12 text-slate-800">
