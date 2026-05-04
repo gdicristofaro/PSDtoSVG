@@ -286,11 +286,11 @@ const App: React.FC = () => {
             </div>
 
             <div className="lg:col-span-5 space-y-4">
-              <div className="bg-slate-50 dark:bg-gray-700 p-4 rounded-3xl border border-slate-100 dark:border-gray-700">
+              <div className="flex flex-col items-stretch bg-slate-50 dark:bg-gray-700 rounded-3xl border border-slate-100 dark:border-gray-700">
                 <button
                   type="button"
                   onClick={() => toggleCard('dashArray')}
-                  className="w-full flex items-center justify-between gap-3 mb-5 text-left"
+                  className="p-4 pb-5 w-full flex items-center justify-between gap-3 text-left"
                 >
                   <p className="font-bold text-slate-700 dark:text-white uppercase tracking-tight">
                     Dash Array Pattern
@@ -306,7 +306,7 @@ const App: React.FC = () => {
                     expandedCards.dashArray ? 'max-h-[1000px]' : 'max-h-0'
                   }`}
                 >
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div className="m-4 mt-0 grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {['None', 'Small', 'Medium', 'Large'].map((label, idx) => (
                       <label
                         key={label}
@@ -334,11 +334,11 @@ const App: React.FC = () => {
                 </div>
               </div>
 
-              <div className="bg-slate-50 dark:bg-gray-700 p-4 rounded-3xl border border-slate-100 dark:border-gray-700">
+              <div className="flex flex-col items-stretch bg-slate-50 dark:bg-gray-700 rounded-3xl border border-slate-100 dark:border-gray-700">
                 <button
                   type="button"
                   onClick={() => toggleCard('sliders')}
-                  className="w-full flex items-center justify-between gap-3 mb-5 text-left"
+                  className="p-4 pb-5 flex items-center justify-between gap-3 text-left"
                 >
                   <p className="font-bold text-slate-700 dark:text-white uppercase tracking-tight">
                     Controls
@@ -354,7 +354,7 @@ const App: React.FC = () => {
                     expandedCards.sliders ? 'max-h-[2000px]' : 'max-h-0'
                   }`}
                 >
-                  <div className="space-y-2">
+                  <div className="m-4 mt-0 space-y-2">
                     {[
                       {
                         label: 'Global Scale',
@@ -406,11 +406,11 @@ const App: React.FC = () => {
                 </div>
               </div>
 
-              <div className="bg-slate-900 dark:bg-gray-900 p-4 rounded-3xl shadow-xl">
+              <div className="flex flex-col items-stretch bg-slate-900 dark:bg-gray-900 rounded-3xl shadow-xl">
                 <button
                   type="button"
                   onClick={() => toggleCard('color')}
-                  className="w-full flex items-center justify-between gap-3 mb-5 text-left"
+                  className="p-4 pb-5 flex items-center justify-between gap-3 text-left"
                 >
                   <p className="text-white font-bold text-xs uppercase tracking-widest">
                     Color Mapping
@@ -426,7 +426,7 @@ const App: React.FC = () => {
                     expandedCards.color ? 'max-h-[1400px]' : 'max-h-0'
                   }`}
                 >
-                  <div className="space-y-2">
+                  <div className="m-4 mt-0 space-y-2">
                     {['Door', 'Tire', 'Hood', 'Lights', 'Window'].map(
                       (part) => {
                         const key =
