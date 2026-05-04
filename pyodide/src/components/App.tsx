@@ -115,11 +115,11 @@ const App: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen font-sans text-slate-900 scroll-smooth">
+    <div className="min-h-screen font-sans text-slate-900 dark:text-white scroll-smooth">
       {/* Navigation Bar */}
-      <nav className="sticky top-0 w-full bg-white/90 backdrop-blur-md shadow-sm z-50">
+      <nav className="sticky top-0 w-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-md shadow-sm z-50">
         <div className="max-w-6xl mx-auto px-6 py-3 flex flex-wrap items-center justify-between gap-4">
-          <div className="hidden sm:block font-bold text-xl tracking-tight text-indigo-600">
+          <div className="hidden sm:block font-bold text-xl tracking-tight text-indigo-600 dark:text-indigo-400">
             PSD to SVG
           </div>
           <div className="flex flex-wrap gap-4">
@@ -129,8 +129,8 @@ const App: React.FC = () => {
                 href={`#${item.id}`}
                 className={`text-sm font-semibold transition-all duration-200 pb-1 border-b-2 ${
                   activeSection === item.id
-                    ? 'text-indigo-600 border-indigo-600'
-                    : 'text-slate-500 hover:text-slate-900 border-transparent'
+                ? 'text-indigo-600 dark:text-indigo-400 border-indigo-600'
+                    : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white border-transparent'
                 }`}
               >
                 {item.label}
@@ -143,18 +143,18 @@ const App: React.FC = () => {
       {/* Convert Section */}
       <section
         id="convert"
-        className="-mt-14 pt-24 min-h-screen bg-slate-50 flex flex-col items-center"
+        className="-mt-14 pt-24 min-h-screen bg-slate-50 dark:bg-gray-900 flex flex-col items-center"
       >
         <div className="max-w-4xl w-full px-6">
-          <h2 className="text-4xl font-extrabold mb-8 text-slate-800">
+          <h2 className="text-4xl font-extrabold mb-8 text-slate-800 dark:text-white">
             Convert
           </h2>
-          <div className="max-content-height bg-white rounded-3xl shadow-xl p-10 flex flex-col items-center border border-slate-100">
-            <div className="w-full max-w-lg aspect-square bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 flex items-center justify-center mb-8 overflow-hidden relative">
+          <div className="max-content-height bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-10 flex flex-col items-center border border-slate-100 dark:border-gray-700">
+            <div className="w-full max-w-lg aspect-square bg-slate-50 dark:bg-gray-700 rounded-2xl border-2 border-dashed border-slate-200 dark:border-gray-600 flex items-center justify-center mb-8 overflow-hidden relative">
               {processing ? (
                 <div className="flex items-center justify-center">
                   <svg
-                    className="animate-spin -ml-1 mr-3 h-12 w-12 text-slate-400"
+                    className="animate-spin -ml-1 mr-3 h-12 w-12 text-slate-400 dark:text-gray-500"
                     fill="none"
                     viewBox="0 0 24 24"
                   >
@@ -180,11 +180,11 @@ const App: React.FC = () => {
                   />
                 </div>
               ) : (
-                <p className="text-slate-400 font-medium">SVG Preview Area</p>
+                <p className="text-slate-400 dark:text-gray-500 font-medium">SVG Preview Area</p>
               )}
             </div>
             <div className="flex flex-wrap gap-4 justify-center w-full">
-              <label className="flex flex-wrap items-center gap-2 bg-indigo-600 text-white px-8 py-4 rounded-xl hover:bg-indigo-700 transition-all cursor-pointer shadow-lg shadow-indigo-200">
+              <label className="flex flex-wrap items-center gap-2 bg-indigo-600 text-white px-8 py-4 rounded-xl hover:bg-indigo-700 transition-all cursor-pointer shadow-lg shadow-indigo-200/80 dark:shadow-indigo-900/40">
                 <ArrowUpTrayIcon className="size-6" />
                 <span className="font-bold whitespace-normal">Upload PSD</span>
                 <input
@@ -205,7 +205,7 @@ const App: React.FC = () => {
                     saveAs(blob, processedSvg.fileName);
                   }
                 }}
-                className={`flex flex-wrap items-center gap-2 bg-white border-2 border-slate-100 px-8 py-4 rounded-xl hover:border-slate-200 transition-all disabled:opacity-40 disabled:grayscale text-slate-700 font-bold ${processedSvg ? 'cursor-pointer' : ''}`}
+                className={`flex flex-wrap items-center gap-2 bg-white dark:bg-gray-800 border-2 border-slate-100 dark:border-gray-700 px-8 py-4 rounded-xl hover:border-slate-200 dark:hover:border-gray-500 transition-all disabled:opacity-40 disabled:grayscale text-slate-700 dark:text-white font-bold ${processedSvg ? 'cursor-pointer' : ''}`}
               >
                 <ArrowDownIcon className="size-6" />
                 <span className="whitespace-normal">Download</span>
@@ -218,11 +218,11 @@ const App: React.FC = () => {
       {/* Learn Section */}
       <section
         id="learn"
-        className="min-h-screen pt-24 pb-12 bg-white flex flex-col items-center"
+        className="min-h-screen pt-24 pb-12 bg-white dark:bg-gray-800 flex flex-col items-center"
       >
         <div className="max-w-5xl w-full px-6">
-          <h2 className="text-4xl font-extrabold mb-8 text-slate-800">Learn</h2>
-          <div className="max-content-height aspect-video w-full rounded-3xl overflow-hidden shadow-2xl border-8 border-slate-50">
+          <h2 className="text-4xl font-extrabold mb-8 text-slate-800 dark:text-white">Learn</h2>
+          <div className="max-content-height aspect-video w-full shadow-2xl">
                 <YoutubeEmbed />
           </div>
         </div>
@@ -231,15 +231,15 @@ const App: React.FC = () => {
       {/* Animate Section */}
       <section
         id="animate"
-        className="min-h-screen pt-24 pb-12 bg-slate-50 flex flex-col items-center"
+        className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-gray-900 flex flex-col items-center"
       >
         <div className="max-w-6xl w-full px-6">
-          <h2 className="text-4xl font-extrabold mb-8 text-slate-800">
+          <h2 className="text-4xl font-extrabold mb-8 text-slate-800 dark:text-white">
             Animate
           </h2>
           <div className="grid lg:grid-cols-2 gap-10">
-            <div className="bg-white rounded-3xl shadow-lg p-8 border border-slate-100 flex flex-col items-center w-full flex flex-column max-content-height">
-              <div className="w-full grow aspect-square bg-slate-50 rounded-2xl flex items-center justify-center mb-8 min-h-0">
+            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-lg p-8 border border-slate-100 dark:border-gray-700 flex flex-col items-center w-full flex flex-column max-content-height">
+              <div className="w-full grow aspect-square bg-slate-50 dark:bg-gray-700 rounded-2xl flex items-center justify-center mb-8 min-h-0">
                 <AnimateGraphic />
               </div>
               <button
@@ -252,9 +252,9 @@ const App: React.FC = () => {
               </button>
             </div>
 
-            <div className="bg-slate-900 rounded-3xl pt-8 pb-8 text-indigo-300 font-mono text-sm shadow-2xl flex flex-col min-h-120">
-              <div className="flex flex-none items-center justify-between border-b border-slate-800 pb-4">
-                <div className="ml-8 mr-8 flex items-center gap-2 text-slate-400">
+            <div className="bg-black rounded-3xl pt-8 pb-8 text-indigo-300 font-mono text-sm shadow-2xl flex flex-col min-h-120">
+              <div className="flex flex-none items-center justify-between border-b border-slate-800 dark:border-gray-700 pb-4">
+                <div className="ml-8 mr-8 flex items-center gap-2 text-slate-400 dark:text-gray-500">
                   <CommandLineIcon className="size-6" />
                   <span className="text-xs uppercase tracking-widest font-bold">
                     D3 Transition
@@ -272,27 +272,27 @@ const App: React.FC = () => {
       {/* Playground Section */}
       <section
         id="playground"
-        className="min-h-screen pt-24 pb-20 bg-white flex flex-col items-center"
+        className="min-h-screen pt-24 pb-20 bg-white dark:bg-gray-800 flex flex-col items-center"
       >
         <div className="max-w-6xl w-full px-6">
-          <h2 className="text-4xl font-extrabold mb-12 text-slate-800">
+          <h2 className="text-4xl font-extrabold mb-12 text-slate-800 dark:text-white">
             Playground
           </h2>
           <div className="grid lg:grid-cols-12 gap-8">
-            <div className="lg:col-span-7 bg-slate-50 rounded-[2.5rem] max-content-height flex items-center justify-center shadow-inner border border-slate-100 p-8">
+            <div className="lg:col-span-7 bg-slate-50 dark:bg-gray-700 rounded-[2.5rem] max-content-height flex items-center justify-center shadow-inner border border-slate-100 dark:border-gray-700 p-8">
               <div className="flex grow min-h-0 h-full items-center justify-center transition-transform duration-300 ease-out grow">
                 <PlaygroundGraphic playgroundState={playgroundState} />
               </div>
             </div>
 
             <div className="lg:col-span-5 space-y-4">
-              <div className="bg-slate-50 p-4 rounded-3xl border border-slate-100">
+              <div className="bg-slate-50 dark:bg-gray-700 p-4 rounded-3xl border border-slate-100 dark:border-gray-700">
                 <button
                   type="button"
                   onClick={() => toggleCard('dashArray')}
                   className="w-full flex items-center justify-between gap-3 mb-5 text-left"
                 >
-                  <p className="font-bold text-slate-700 uppercase tracking-tight">
+                  <p className="font-bold text-slate-700 dark:text-white uppercase tracking-tight">
                     Dash Array Pattern
                   </p>
                   <ChevronDownIcon
@@ -310,7 +310,7 @@ const App: React.FC = () => {
                     {['None', 'Small', 'Medium', 'Large'].map((label, idx) => (
                       <label
                         key={label}
-                        className={`flex flex-wrap items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all cursor-pointer ${playgroundState.dashArray === label.toLocaleLowerCase() ? 'bg-indigo-600 border-indigo-600 text-white' : 'bg-white border-slate-100 text-slate-500 hover:border-indigo-200'}`}
+                        className={`flex flex-wrap items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all cursor-pointer ${playgroundState.dashArray === label.toLocaleLowerCase() ? 'bg-indigo-600 border-indigo-600 text-white' : 'bg-white dark:bg-gray-800 border-slate-100 dark:border-gray-700 text-slate-500 dark:text-gray-400 hover:border-indigo-200 dark:hover:border-indigo-500'}`}
                       >
                         <input
                           type="radio"
@@ -334,13 +334,13 @@ const App: React.FC = () => {
                 </div>
               </div>
 
-              <div className="bg-slate-50 p-4 rounded-3xl border border-slate-100">
+              <div className="bg-slate-50 dark:bg-gray-700 p-4 rounded-3xl border border-slate-100 dark:border-gray-700">
                 <button
                   type="button"
                   onClick={() => toggleCard('sliders')}
                   className="w-full flex items-center justify-between gap-3 mb-5 text-left"
                 >
-                  <p className="font-bold text-slate-700 uppercase tracking-tight">
+                  <p className="font-bold text-slate-700 dark:text-white uppercase tracking-tight">
                     Controls
                   </p>
                   <ChevronDownIcon
@@ -383,9 +383,9 @@ const App: React.FC = () => {
                       }
                     ].map((s) => (
                       <div key={s.key}>
-                        <div className="flex justify-between text-xs font-black text-slate-400 uppercase mb-2">
+                        <div className="flex justify-between text-xs font-black text-slate-400 dark:text-gray-300 uppercase mb-2">
                           <span>{s.label}</span>
-                          <span className="text-indigo-600">
+                          <span className="text-indigo-700 dark:text-indigo-300">
                             {playgroundState[s.key]}
                           </span>
                         </div>
@@ -398,7 +398,7 @@ const App: React.FC = () => {
                           onChange={(e) =>
                             updatePlayground(s.key, e.target.value)
                           }
-                          className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+                          className="w-full h-2 bg-slate-200 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer accent-indigo-600 dark:accent-indigo-400"
                         />
                       </div>
                     ))}
@@ -406,7 +406,7 @@ const App: React.FC = () => {
                 </div>
               </div>
 
-              <div className="bg-slate-900 p-4 rounded-3xl shadow-xl">
+              <div className="bg-slate-900 dark:bg-gray-900 p-4 rounded-3xl shadow-xl">
                 <button
                   type="button"
                   onClick={() => toggleCard('color')}
@@ -442,9 +442,9 @@ const App: React.FC = () => {
                               onChange={(e) =>
                                 updatePlayground(key, e.target.value)
                               }
-                              className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-400"
+                              className="w-full h-1.5 bg-slate-700 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-indigo-400 dark:accent-indigo-400"
                             />
-                            <span className="text-[10px] text-slate-500 font-bold uppercase">
+                            <span className="text-[10px] text-slate-300 dark:text-gray-300 font-bold uppercase">
                               {part} HUE
                             </span>
                           </div>
