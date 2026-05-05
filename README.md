@@ -5,7 +5,7 @@ Project includes `potrace.py`. This file is a port from [Kilobyte's potrace libr
 **Feel free to try the [demo](https://gdicristofaro.github.io/PSDtoSVG/)**
 
 # Project structure:
-- `src`: the python package source to build `PSDtoSVG`.
-- `frontend`: contains a web application that runs the python code in browser using pyodide or can be built to send requests to convert PSD files to a backend.
-- `flask`: basic flask app requiring the `PSDtoSVG` build and the `frontend` build.
+- `src` - the python package source to build `PSDtoSVG`.
+- `frontend` - contains a web application that runs the python code in browser using pyodide or can be built to send requests to convert PSD files to a backend.
+- `flask` - basic flask app requiring the `PSDtoSVG` build and the `frontend` build.
 

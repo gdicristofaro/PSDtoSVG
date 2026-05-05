@@ -31,13 +31,13 @@ After gathering all the necessary wheels, I generated the `pyodide-lock.json`.  
 
 # Pyodide important links
 
-[https://verbitskiy.co/blog/no-backend-needed-running-python-in-react-with-pyodide/](https://verbitskiy.co/blog/no-backend-needed-running-python-in-react-with-pyodide/)
-[https://pyodide.org/en/stable/usage/loading-packages.html](https://pyodide.org/en/stable/usage/loading-packages.html)
-[https://pyodide.org/en/stable/usage/loading-custom-python-code.html](https://pyodide.org/en/stable/usage/loading-custom-python-code.html)
-[https://pyodide.org/en/stable/development/building-packages-from-source.html](https://pyodide.org/en/stable/development/building-packages-from-source.html)
-[https://pyodide.org/en/stable/development/building-from-sources.html](https://pyodide.org/en/stable/development/building-from-sources.html)
-[https://github.com/pyodide/pyodide/issues/6177](https://github.com/pyodide/pyodide/issues/6177)
-[https://pyodide.org/en/stable/console.html](https://pyodide.org/en/stable/console.html)
-[https://pypi.org/project/pyodide-build/#history](https://pypi.org/project/pyodide-build/#history)
-[https://emscripten.org/docs/getting_started/downloads.html](https://emscripten.org/docs/getting_started/downloads.html)
+- [https://verbitskiy.co/blog/no-backend-needed-running-python-in-react-with-pyodide/](https://verbitskiy.co/blog/no-backend-needed-running-python-in-react-with-pyodide/)
+- [https://pyodide.org/en/stable/usage/loading-packages.html](https://pyodide.org/en/stable/usage/loading-packages.html)
+- [https://pyodide.org/en/stable/usage/loading-custom-python-code.html](https://pyodide.org/en/stable/usage/loading-custom-python-code.html)
+- [https://pyodide.org/en/stable/development/building-packages-from-source.html](https://pyodide.org/en/stable/development/building-packages-from-source.html)
+- [https://pyodide.org/en/stable/development/building-from-sources.html](https://pyodide.org/en/stable/development/building-from-sources.html)
+- [https://github.com/pyodide/pyodide/issues/6177](https://github.com/pyodide/pyodide/issues/6177)
+- [https://pyodide.org/en/stable/console.html](https://pyodide.org/en/stable/console.html)
+- [https://pypi.org/project/pyodide-build/#history](https://pypi.org/project/pyodide-build/#history)
+- [https://emscripten.org/docs/getting_started/downloads.html](https://emscripten.org/docs/getting_started/downloads.html)
 
