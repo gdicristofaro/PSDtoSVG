@@ -1,12 +1,7 @@
-'''
-* Greg DiCristofaro
-* MET CS 521 O1
-* Final Project
-* PSD to SVG
-'''
-
+from __future__ import annotations
 from psd_tools import PSDImage
 from psd_tools.api.layers import Group, Layer
+from typing import Union, List, Dict, Any
 import base64
 from io import BytesIO
 import re
@@ -16,7 +11,7 @@ from PIL import Image
 from psdtosvg.potrace import Bitmap, process, get_svg_path
 
 
-def get_bitmap_arr(pixel_array, width, height, alpha_channel):
+def get_bitmap_arr(pixel_array: np.ndarray, width: int, height: int, alpha_channel: int) -> Bitmap:
     """
     based on image data, creates a list where pixel is located at
     [x + width * y], the pixel is either true or false
@@ -30,10 +25,10 @@ def get_bitmap_arr(pixel_array, width, height, alpha_channel):
     return Bitmap(width, height, data)
 
 
-def avg_color(pixel_array):
+def avg_color(pixel_array: np.ndarray) -> dict:
     """
     gets the average color found in the image data
-    :param img_data: the image data as an array of colors
+    :param pixel_array: the image data as an array of colors
     :returns: the average color found in the image
     """
     avg = np.mean(pixel_array[pixel_array[:, 3] > 0], axis=0)
@@ -44,7 +39,7 @@ def avg_color(pixel_array):
     }
 
 
-def svg_converter(layer, id_num, get_dataurl=False):
+def svg_converter(layer: Layer, id_num: int, get_dataurl: bool = False) -> dict:
     """
     converts a layer into an svg readable item
     :param layer: the PSD image layer to be converted
@@ -106,7 +101,7 @@ def svg_converter(layer, id_num, get_dataurl=False):
         }
 
 
-def gather_layers(item):
+def gather_layers(item: Union[PSDImage, Group, Layer]) -> list:
     """
     gathers all layers (recursively checking in groups) and
     returns a list of layers to be converted to svg items
@@ -130,7 +125,7 @@ def gather_layers(item):
         return [item]
 
 
-def handle_layers(psd):
+def handle_layers(psd: PSDImage) -> list:
     """
     analyzes psd and converts all pertinent aspects to something
     that will be converted to an svg
@@ -155,12 +150,13 @@ STROKE_WIDTH = 2
 FILL_OPACITY = .6
 
 
-def get_svg(all_layers, width, height):
+def get_svg(all_layers: list, width: int, height: int) -> str:
     """
     creates an SVG file with all layers included
     :param all_layers: the processed layer items to be added
     :param width: the width of the svg viewbox
     :param height: the height of the svg viewbox
+    :returns: the generated SVG string
     """
 
     svg_str = '''<?xml version="1.0" encoding="UTF-8" ?>
@@ -195,7 +191,7 @@ def get_svg(all_layers, width, height):
     return svg_str + '</svg>'
 
 
-def psd_to_svg(psd):
+def psd_to_svg(psd: PSDImage) -> str:
     """
     main method for converting psd to an svg item
     :param psd: the psd file
@@ -207,7 +203,7 @@ def psd_to_svg(psd):
     return get_svg(all_groups, width, height)
 
 
-def psd_file_to_svg(psd_path):
+def psd_file_to_svg(psd_path: str) -> str:
     """
     converts a psd file path to an svg
     :param psd_path: the path to the psd
@@ -218,7 +214,7 @@ def psd_file_to_svg(psd_path):
     return svg
 
 
-def psd_stream_to_svg(psd_stream):
+def psd_stream_to_svg(psd_stream: BytesIO) -> str:
     """
     converts a psd file path to an svg
     :param psd_stream: the psd stream

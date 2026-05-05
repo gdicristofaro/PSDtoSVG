@@ -1,17 +1,9 @@
-'''
-* Greg DiCristofaro
-* February 18th, 2017
-* Ported from
-* https://github.com/kilobtye/potrace
-* which in turn is ported from:
-* https://potrace.sourceforge.net/
-* licensed under GPL-3: https://www.gnu.org/licenses/gpl-3.0.en.html
-'''
-
+from __future__ import annotations
 import math
+from typing import Optional, List, Dict, Any
 
 
-def new_array(n, def_val=0):
+def new_array(n: int, def_val: Any = 0) -> list:
     """
     creates a list of length n with the initial value specified
     :param n: number of items in list
@@ -26,7 +18,7 @@ class Point:
     defines a point with x,y coordinates
     """
 
-    def __init__(self, x=0, y=0):
+    def __init__(self, x: int = 0, y: int = 0) -> None:
         """
         main constructor for a point
         :param x: the x coordinate
@@ -35,14 +27,14 @@ class Point:
         self.x = x
         self.y = y
 
-    def copy(self):
+    def copy(self) -> 'Point':
         """
         creates a copy of the current point
         :returns: the copy of this point
         """
         return Point(self.x, self.y)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "Point: ({}, {})".format(self.x, self.y)
 
 
@@ -53,7 +45,7 @@ class Bitmap:
     to be encapsulated at a particular point.
     """
 
-    def __init__(self, w, h, data=None):
+    def __init__(self, w: int, h: int, data: Optional[list] = None) -> None:
         """
         Initializes the bitmap.
         :param w: the width of the bitmap
@@ -71,7 +63,7 @@ class Bitmap:
         else:
             self.data = data
 
-    def at(self, x, y):
+    def at(self, x: int, y: int) -> bool:
         """
         Returns whether or not image data is present at the given location
         :param x: the 0-indexed x location
@@ -83,7 +75,7 @@ class Bitmap:
         return (self.w > x >= 0 and self.h > y >= 0 and
                 self.data[self.w * y + x])
 
-    def index(self, i):
+    def index(self, i: int) -> Point:
         """
         Returns the x,y location of the given index
         :param i: the index requested
@@ -93,7 +85,7 @@ class Bitmap:
         x = i - y * self.w
         return Point(x, y)
 
-    def flip(self, x, y):
+    def flip(self, x: int, y: int) -> None:
         """
         Switches the boolean value at the given location.
         :param x: the x location
@@ -106,7 +98,7 @@ class Bitmap:
         else:
             self.data[self.w * y + x] = True
 
-    def copy(self):
+    def copy(self) -> 'Bitmap':
         """
         Returns a deep copy of the bitmap data
         :returns: the copy of the bitmap
@@ -120,7 +112,7 @@ class Path:
     as it is accumulated and passed through the different stages of the
     Potrace algorithm.
     """
-    def __init__(self):
+    def __init__(self) -> None:
         self.area = 0
         self.len = 0
         self.curve = {}
@@ -141,7 +133,7 @@ class Curve:
         vertex: for CORNER, this equals c[1]
         alpha: only for CURVE
     """
-    def __init__(self, n):
+    def __init__(self, n: int) -> None:
         self.n = n
         self.tag = new_array(n)
         self.c = new_array(n * 3)
@@ -152,7 +144,7 @@ class Curve:
         self.beta = new_array(n)
 
 
-def find_next(bm1, point):
+def find_next(bm1: Bitmap, point: Point) -> Optional[Point]:
     """
     search for next point that has image data or returns None if none left
     :param point: defines point to start search
@@ -168,7 +160,7 @@ def find_next(bm1, point):
         return None
 
 
-def majority(bm1, x, y):
+def majority(bm1: Bitmap, x: int, y: int) -> bool:
     """
     return the "majority" value of bitmap bm at intersection (x,y). We
     assume that the bitmap is balanced at "radius" 1.
@@ -193,7 +185,7 @@ def majority(bm1, x, y):
     return False
 
 
-def find_path(bm, bm1, turnpolicy, point):
+def find_path(bm: Bitmap, bm1: Bitmap, turnpolicy: str, point: Point) -> Path:
     """
     Computes a path in the given pixmap, separating black from white.
     Also compute the area enclosed by the path.
@@ -259,7 +251,7 @@ def find_path(bm, bm1, turnpolicy, point):
     return path
 
 
-def xor_path(bm1, path):
+def xor_path(bm1: Bitmap, path: Path) -> None:
     """
     xor the given pixmap with the interior of the given path.
     Note: the path must be within the dimensions of the pixmap
@@ -282,7 +274,7 @@ def xor_path(bm1, path):
             y1 = y
 
 
-def bm_to_path_list(bm, turnpolicy, turdsize):
+def bm_to_path_list(bm: Bitmap, turnpolicy: str, turdsize: int) -> list:
     """
     Decompose the given bitmap into paths. Returns a list of
     paths with the fields len, pt, area, sign filled
@@ -317,10 +309,10 @@ class Quad:
     matrices.  The value of the quadratic form at a vector (x,y) is v^t
     Q v, where v = (x,y,1)^t.
     """
-    def __init__(self):
+    def __init__(self) -> None:
         self.data = new_array(9)
 
-    def at(self, x, y):
+    def at(self, x: int, y: int) -> float:
         """
         The value of the quadratic form at a vector
         :param x: the x coordinate
@@ -334,21 +326,24 @@ class Sum:
     """
     cache for fast summing
     """
-    def __init__(self, x, y, xy, x2, y2):
+    def __init__(self, x: int, y: int, xy: int, x2: int, y2: int) -> None:
         self.x = x
         self.y = y
         self.xy = xy
         self.x2 = x2
         self.y2 = y2
 
-    def __str__(self):
+    def __str__(self) -> str:
         fmt_str = "Sum: {{x: {}, y: {}, xy: {}, x2: {}, y2: {}}}"
         return fmt_str.format(self.x, self.y, self.xy, self.x2, self.y2)
 
 
-def mod(a, n):
+def mod(a: int, n: int) -> int:
     """
     assists with integer arithmetic
+    :param a: the number to mod
+    :param n: the modulo base
+    :returns: the result of a modulo n
     """
     if a >= n:
         return a % n
@@ -358,16 +353,23 @@ def mod(a, n):
         return n - 1 - (-1 - a) % n
 
 
-def xprod(p1, p2):
+def xprod(p1: Point, p2: Point) -> float:
     """
     calculate p1 x p2
+    :param p1: point 1
+    :param p2: point 2
+    :returns: cross product
     """
     return p1.x * p2.y - p1.y * p2.x
 
 
-def cyclic(a, b, c):
+def cyclic(a: float, b: float, c: float) -> bool:
     """
     return true if a <= b < c < a, in a cyclic sense (mod n)
+    :param a: value a
+    :param b: value b
+    :param c: value c
+    :returns: true if cyclic condition is met
     """
     if a <= c:
         return a <= b < c
@@ -375,7 +377,7 @@ def cyclic(a, b, c):
         return a <= b or b < c
 
 
-def sign(i):
+def sign(i: float) -> int:
     """
     determines sign of i value (negative, 0, positive)
     :param i: the number to process
@@ -389,9 +391,12 @@ def sign(i):
         return 0
 
 
-def quadform(q, w):
+def quadform(q: Quad, w: Point) -> float:
     """
     Apply quadratic form Q to vector w = (w.x,w.y)
+    :param q: quadratic form
+    :param w: point vector
+    :returns: applied value
     """
     v = new_array(3)
 
@@ -407,16 +412,20 @@ def quadform(q, w):
     return cur_sum
 
 
-def interval(funct, a, b):
+def interval(funct: float, a: Point, b: Point) -> Point:
     """
     range over the straight line segment [a,b] when lambda ranges over [0,1]
+    :param funct: lambda range function
+    :param a: point a
+    :param b: point b
+    :returns: interpolated point
     """
     x = a.x + funct * (b.x - a.x)
     y = a.y + funct * (b.y - a.y)
     return Point(x, y)
 
 
-def dorth_infty(p0, p2):
+def dorth_infty(p0: Point, p2: Point) -> Point:
     """
     return a direction that is 90 degrees counterclockwise from p2-p0,
     but then restricted to one of the major wind directions (n, nw, w, etc)
@@ -429,7 +438,7 @@ def dorth_infty(p0, p2):
     return Point(x, y)
 
 
-def ddenom(p0, p2):
+def ddenom(p0: Point, p2: Point) -> float:
     """
     ddenom/dpara have the property that the square of radius 1 centered
     at p1 intersects the line p0p2 iff |dpara(p0,p1,p2)| <= ddenom(p0,p2)
@@ -441,7 +450,7 @@ def ddenom(p0, p2):
     return r.y * (p2.x - p0.x) - r.x * (p2.y - p0.y)
 
 
-def dpara(p0, p1, p2):
+def dpara(p0: Point, p1: Point, p2: Point) -> float:
     """
     returns the area of the parallelogram
     :param p0: point 0
@@ -456,9 +465,14 @@ def dpara(p0, p1, p2):
     return x1 * y2 - x2 * y1
 
 
-def cprod(p0, p1, p2, p3):
+def cprod(p0: Point, p1: Point, p2: Point, p3: Point) -> float:
     """
     calculate (p1-p0)x(p3-p2)
+    :param p0: point 0
+    :param p1: point 1
+    :param p2: point 2
+    :param p3: point 3
+    :returns: cross product area
     """
     x1 = p1.x - p0.x
     y1 = p1.y - p0.y
@@ -467,9 +481,13 @@ def cprod(p0, p1, p2, p3):
     return x1 * y2 - x2 * y1
 
 
-def iprod(p0, p1, p2):
+def iprod(p0: Point, p1: Point, p2: Point) -> float:
     """
     calculate (p1-p0)*(p2-p0)
+    :param p0: point 0
+    :param p1: point 1
+    :param p2: point 2
+    :returns: inner product
     """
     x1 = p1.x - p0.x
     y1 = p1.y - p0.y
@@ -478,9 +496,14 @@ def iprod(p0, p1, p2):
     return x1 * x2 + y1 * y2
 
 
-def iprod1(p0, p1, p2, p3):
+def iprod1(p0: Point, p1: Point, p2: Point, p3: Point) -> float:
     """
     calculate (p1-p0)*(p3-p2)
+    :param p0: point 0
+    :param p1: point 1
+    :param p2: point 2
+    :param p3: point 3
+    :returns: inner product
     """
     x1 = p1.x - p0.x
     y1 = p1.y - p0.y
@@ -489,17 +512,26 @@ def iprod1(p0, p1, p2, p3):
     return x1 * x2 + y1 * y2
 
 
-def ddist(p, q):
+def ddist(p: Point, q: Point) -> float:
     """
     calculate distance between two points
+    :param p: point 1
+    :param q: point 2
+    :returns: distance
     """
     return math.sqrt((p.x - q.x) * (p.x - q.x) +
                      (p.y - q.y) * (p.y - q.y))
 
 
-def bezier(t, p0, p1, p2, p3):
+def bezier(t: float, p0: Point, p1: Point, p2: Point, p3: Point) -> Point:
     """
     calculate point of a bezier curve
+    :param t: interpolation factor
+    :param p0: point 0
+    :param p1: point 1
+    :param p2: point 2
+    :param p3: point 3
+    :returns: point on the curve
     """
     s = 1 - t
     x = (s * s * s * p0.x + 3 * (s * s * t) * p1.x +
@@ -509,11 +541,18 @@ def bezier(t, p0, p1, p2, p3):
     return Point(x, y)
 
 
-def tangent(p0, p1, p2, p3, q0, q1):
+def tangent(p0: Point, p1: Point, p2: Point, p3: Point, q0: Point, q1: Point) -> float:
     """
     calculate the point t in [0..1] on the (convex) bezier curve
     (p0,p1,p2,p3) which is tangent to q1-q0. Return -1.0 if there is no
     solution in [0..1].
+    :param p0: bezier point 0
+    :param p1: bezier point 1
+    :param p2: bezier point 2
+    :param p3: bezier point 3
+    :param q0: line point 0
+    :param q1: line point 1
+    :returns: tangent parameter t
     """
     a_prod = cprod(p0, p1, q0, q1)
     b_prod = cprod(p1, p2, q0, q1)
@@ -541,10 +580,11 @@ def tangent(p0, p1, p2, p3, q0, q1):
         return -1.0
 
 
-def calc_sums(path):
+def calc_sums(path: Path) -> None:
     """
     Preparation: fill in the sum fields of a path (used for later
     rapid summing)
+    :param path: path object
     """
     path.x0 = path.pt[0].x
     path.y0 = path.pt[0].y
@@ -559,12 +599,13 @@ def calc_sums(path):
                      s[i].x2 + x * x, s[i].y2 + y * y))
 
 
-def calc_lon(path):
+def calc_lon(path: Path) -> None:
     """
     determine the straight subpaths.  Fill in the
     "lon" component of a path object (based on pt/len).	For each i,
     lon[i] is the furthest index such that a straight line can be drawn
     from i to lon[i].
+    :param path: path object
     """
     n = path.len
     pt = path.pt
@@ -678,10 +719,14 @@ def calc_lon(path):
         i -= 1
 
 
-def penalty3(path, i, j):
+def penalty3(path: Path, i: int, j: int) -> float:
     """
     Auxiliary function: calculate the penalty of an edge from i to j in
     the given path. This needs the "lon" and "sum*" data.
+    :param path: path object
+    :param i: start index
+    :param j: end index
+    :returns: calculated penalty
     """
     n = path.len
     pt = path.pt
@@ -720,9 +765,10 @@ def penalty3(path, i, j):
     return math.sqrt(s)
 
 
-def best_polygon(path):
+def best_polygon(path: Path) -> None:
     """
     find the optimal polygon. Fill in the m and po components.
+    :param path: path object
     """
     n = path.len
     pen = new_array(n + 1)
@@ -788,10 +834,15 @@ def best_polygon(path):
         j -= 1
 
 
-def pointslope(path, i, j, ctr, direct):
+def pointslope(path: Path, i: int, j: int, ctr: Point, direct: Point) -> None:
     """
     determine the center and slope of the line i..j. Assume i<j. Needs
     "sum" components of p to be set.
+    :param path: path object
+    :param i: start index
+    :param j: end index
+    :param ctr: center point reference
+    :param direct: direction point reference
     """
     n = path.len
     sums = path.sums
@@ -848,12 +899,13 @@ def pointslope(path, i, j, ctr, direct):
         direct.y = 0
 
 
-def adjust_vertices(path):
+def adjust_vertices(path: Path) -> None:
     """
     Adjust vertices of optimal polygon: calculate the intersection of
     the two "optimal" line segments, then move it into the unit square
     if it lies outside. Return 1 with errno set on error; 0 on
     success.
+    :param path: path object
     """
     m = path.m
     po = path.po
@@ -975,9 +1027,10 @@ def adjust_vertices(path):
         path.curve.vertex[i] = Point(xmin + x0, ymin + y0)
 
 
-def reverse(path):
+def reverse(path: Path) -> None:
     """
     reverse orientation of a path
+    :param path: path object
     """
     curve = path.curve
     m = curve.n
@@ -993,7 +1046,7 @@ def reverse(path):
         j -= 1
 
 
-def smooth(path, alphamax):
+def smooth(path: Path, alphamax: float) -> None:
     """
     determines if path curve is CORNER or CURVE as well as
     pertinent points for each kind
@@ -1046,7 +1099,7 @@ class Opti:
     """
     a type for the result of opti_penalty
     """
-    def __init__(self):
+    def __init__(self) -> None:
         self.pen = 0
         self.c = [Point(), Point()]
         self.t = 0
@@ -1054,11 +1107,19 @@ class Opti:
         self.alpha = 0
 
 
-def opti_penalty(path, i, j, res, opttolerance, convc, areac):
+def opti_penalty(path: Path, i: int, j: int, res: Opti, opttolerance: float, convc: list, areac: list) -> int:
     """
     calculate best fit from i+.5 to j+.5.  Assume i<j (cyclically).
     Return 0 and set badness and parameters (alpha, beta), if
     possible. Return 1 if impossible.
+    :param path: path object
+    :param i: start index
+    :param j: end index
+    :param res: optimization result reference
+    :param opttolerance: optimization tolerance
+    :param convc: convexity criteria array
+    :param areac: area criteria array
+    :returns: 0 on success, 1 on failure
     """
     m = path.curve.n
     curve = path.curve
@@ -1185,10 +1246,12 @@ def opti_penalty(path, i, j, res, opttolerance, convc, areac):
     return 0
 
 
-def opti_curve(path, opttolerance):
+def opti_curve(path: Path, opttolerance: float) -> None:
     """
     optimize the path p, replacing sequences of Bezier segments by a
     single segment when possible.
+    :param path: path object
+    :param opttolerance: optimization tolerance
     """
     curve = path.curve
     m = curve.n
@@ -1285,10 +1348,15 @@ def opti_curve(path, opttolerance):
     path.curve = ocurve
 
 
-def process_path(pathlist, alphamax, optcurve, opttolerance):
+def process_path(pathlist: list, alphamax: float, optcurve: bool, opttolerance: float) -> list:
     """
     In change of processing outlines of objects and converting to
     svg-type paths
+    :param pathlist: list of path objects
+    :param alphamax: tolerance between curve and line segment
+    :param optcurve: whether or not to optimize bezier curves
+    :param opttolerance: penalty to allow due to curve combining
+    :returns: processed path list
     """
     for i in range(len(pathlist)):
         path = pathlist[i]
@@ -1308,8 +1376,8 @@ def process_path(pathlist, alphamax, optcurve, opttolerance):
     return pathlist
 
 
-def process(bm, turnpolicy="minority", turdsize=2,
-            alphamax=1, optcurve=True, opttolerance=.2):
+def process(bm: Bitmap, turnpolicy: str = "minority", turdsize: int = 2,
+            alphamax: float = 1, optcurve: bool = True, opttolerance: float = .2) -> list:
     """
     Handles processing bitmap image, converting image to path outlines,
     and converting those outlines into svg-type paths.  Defaults are
@@ -1330,7 +1398,7 @@ def process(bm, turnpolicy="minority", turdsize=2,
     return process_path(pathlist, alphamax, optcurve, opttolerance)
 
 
-def get_svg_path(curve, x_offset=0, y_offset=0, multiplier=1):
+def get_svg_path(curve: Curve, x_offset: float = 0, y_offset: float = 0, multiplier: float = 1) -> str:
     """
     converts curve to svg path
     :param curve: the potrace curve
@@ -1339,27 +1407,35 @@ def get_svg_path(curve, x_offset=0, y_offset=0, multiplier=1):
     :param multiplier: how much to multiply the size
     (i.e. 500x500 image can become 1000 x 1000 if multiplier is 2)
     """
-    def str3(flt):
+    def str3(flt: float) -> str:
         """
         utility method to format float to 3 decimal places
+        :param flt: float to format
+        :returns: formatted float string
         """
         return '{:.3f}'.format(flt)
 
-    def adj_x(x):
+    def adj_x(x: float) -> str:
         """
         gets the adjusted x position based on offset and multiplier
+        :param x: the x coordinate
+        :returns: adjusted x string
         """
         return str3((x + x_offset) * multiplier)
 
-    def adj_y(y):
+    def adj_y(y: float) -> str:
         """
         gets the adjusted y position based on offset and multiplier
+        :param y: the y coordinate
+        :returns: adjusted y string
         """
         return str3((y + y_offset) * multiplier)
 
-    def bezier(i):
+    def bezier(i: int) -> str:
         """
         retrieves the svg path bezier curve format
+        :param i: segment index
+        :returns: svg path segment string
         """
         return ('C ' + adj_x(curve.c[i * 3 + 0].x) + ' ' +
                 adj_y(curve.c[i * 3 + 0].y) + ',' +
@@ -1368,9 +1444,11 @@ def get_svg_path(curve, x_offset=0, y_offset=0, multiplier=1):
                 adj_x(curve.c[i * 3 + 2].x) + ' ' +
                 adj_y(curve.c[i * 3 + 2].y) + ' ')
 
-    def segment(i):
+    def segment(i: int) -> str:
         """
         retrieves the svg path line segment format
+        :param i: segment index
+        :returns: svg path segment string
         """
         return ('L ' + adj_x(curve.c[i * 3 + 1].x) + ' ' +
                 adj_y(curve.c[i * 3 + 1].y) + ' ' +
@@ -1391,7 +1469,7 @@ def get_svg_path(curve, x_offset=0, y_offset=0, multiplier=1):
     return p
 
 
-def get_svg(pathlist, width, height, size=1, opt_type=None):
+def get_svg(pathlist: list, width: float, height: float, size: float = 1, opt_type: Optional[str] = None) -> str:
     """
     gets the full svg string with all paths included
     :param pathlist: the list of path objects
