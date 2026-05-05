@@ -1,86 +1,43 @@
-# Important Links
+# Frontend
 
-https://verbitskiy.co/blog/no-backend-needed-running-python-in-react-with-pyodide/#:~:text=But%20for%20real%20production%20apps,TypeScript%20so%20Pyodide%20works%20in%3A
-https://pyodide.org/en/stable/usage/loading-packages.html
-https://pyodide.org/en/stable/usage/loading-custom-python-code.html
-https://pyodide.org/en/stable/development/building-packages-from-source.html
-https://pyodide.org/en/stable/development/building-from-sources.html
-https://github.com/pyodide/pyodide/issues/6177
-https://pyodide.org/en/stable/console.html
-https://pypi.org/project/pyodide-build/#history
-https://emscripten.org/docs/getting_started/downloads.html
+This is the React frontend for running PSDtoSVG.  It can be run in two modes: an entirely frontend application using pyodide to run python in browser or with a server backend (the [`flask`](../flask/) directory) if built with `npm run build-server-frontend`.
 
+# Pyodide notes
 
-# React + TypeScript + Vite
+See [`src/services/svg-generate.service.pyodide.ts`](./src/services/svg-generate.service.pyodide.ts) as well as the [`public/assets/pyodide` directory](./public/assets/pyodide) for more information, but the overview is as follows.  Pyodide can be run by loading required files from a remote repository with something like 
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+const pyodide = await loadPyodide({
+  indexURL: "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/",
+});
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+or from relative paths with something like:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+const pyodide = await loadPyodide({
+  indexURL: "public/assets/pyodide",
+});
+```
+Currently, the project loads pyodide resources from relative paths to avoid possible remote resource drift.
+
+## Building
+
+Pyodide dependencies/wheels can be built with [pyodide build](https://pypi.org/project/pyodide-build/) or downloaded remotely from pypi or jsdelivr.  In order to run properly, the wheel must not have native dependencies or must be built using pyodide build to properly convert to WebAssembly.  In order to properly get the resources, I built `psd-tools` with pyodide build as it had native dependencies.  I built PSDtoSVG using the normal `python -m build` command.  I downloaded the rest of the files from a relative reference in `https://cdn.jsdelivr.net/pyodide/v0.29.3/full/`.  There are some packages like Pillow that have a specific pyodide generated build.  At the time of writing, there is an issue with wheel naming conventions (see [https://github.com/pyodide/pyodide/issues/6177](https://github.com/pyodide/pyodide/issues/6177) for more information).  The package name is parsed to determine required emscripten version.  To avoid this issue, I renamed natively created packages as they were built with the same version of pyodide running the wheel.
+
+## `pyodide-lock.json`
+
+After gathering all the necessary wheels, I generated the `pyodide-lock.json`.  The important piece here is to ensure the file name and the hash (i.e. `sha256sum <wheel file>`) are correct.  This lock file will instruct micropip on the file names available as well as allow it to do a proper check on the hashes.
+
+# Pyodide important links
+
+[https://verbitskiy.co/blog/no-backend-needed-running-python-in-react-with-pyodide/](https://verbitskiy.co/blog/no-backend-needed-running-python-in-react-with-pyodide/)
+[https://pyodide.org/en/stable/usage/loading-packages.html](https://pyodide.org/en/stable/usage/loading-packages.html)
+[https://pyodide.org/en/stable/usage/loading-custom-python-code.html](https://pyodide.org/en/stable/usage/loading-custom-python-code.html)
+[https://pyodide.org/en/stable/development/building-packages-from-source.html](https://pyodide.org/en/stable/development/building-packages-from-source.html)
+[https://pyodide.org/en/stable/development/building-from-sources.html](https://pyodide.org/en/stable/development/building-from-sources.html)
+[https://github.com/pyodide/pyodide/issues/6177](https://github.com/pyodide/pyodide/issues/6177)
+[https://pyodide.org/en/stable/console.html](https://pyodide.org/en/stable/console.html)
+[https://pypi.org/project/pyodide-build/#history](https://pypi.org/project/pyodide-build/#history)
+[https://emscripten.org/docs/getting_started/downloads.html](https://emscripten.org/docs/getting_started/downloads.html)
+
