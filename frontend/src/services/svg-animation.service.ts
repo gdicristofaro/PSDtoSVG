@@ -37,24 +37,37 @@ function vizSetColor(selection: BaseSelection, color: string) {
   selection.attr('fill', color).attr('stroke', color);
 }
 
-export function runAnimation(
-  onAnimationStart: () => void,
-  onAnimationComplete: () => void
-): void {
-  onAnimationStart();
-
-  const hood = d3.selectAll('#dataviz .Hood_3');
-  const lights = d3.selectAll('#dataviz .Lights_4');
-  const tires = d3.selectAll('#dataviz .Tires_2');
-  const windows = d3.selectAll('#dataviz .Windows_1');
-  const door = d3.selectAll('#dataviz .door_0');
+export function setInitialVizState() {
+  const hood = d3.selectAll('#dataviz .Hood_2');
+  const lights = d3.selectAll('#dataviz .Lights_1');
+  const tires = d3.selectAll('#dataviz .Tires_3');
+  const windows = d3.selectAll('#dataviz .Windows_4');
+  const door = d3.selectAll('#dataviz .door_5');
   const allpaths = d3.selectAll('#dataviz path');
+
+  allpaths
+    .style('fill-opacity', 0)
+    .style('stroke-opacity', 0);
 
   vizSetColor(hood, GREEN);
   vizSetColor(lights, GREEN);
   vizSetColor(tires, GREEN);
   vizSetColor(windows, PURPLE);
   vizSetColor(door, PURPLE);
+}
+
+export function runAnimation(
+  onAnimationStart: () => void,
+  onAnimationComplete: () => void
+): void {
+  onAnimationStart();
+
+  const hood = d3.selectAll('#dataviz .Hood_2');
+  const lights = d3.selectAll('#dataviz .Lights_1');
+  const tires = d3.selectAll('#dataviz .Tires_3');
+  const windows = d3.selectAll('#dataviz .Windows_4');
+  const door = d3.selectAll('#dataviz .door_5');
+  const allpaths = d3.selectAll('#dataviz path');
 
   let startTime = 0;
   animateIn(hood, 2000, startTime);

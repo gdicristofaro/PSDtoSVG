@@ -39,7 +39,7 @@ def avg_color(pixel_array: np.ndarray) -> dict:
     }
 
 
-def svg_converter(layer: Layer, id_num: int, get_dataurl: bool = False) -> dict:
+def svg_converter(layer: Layer, id_num: int, get_dataurl: bool = False) -> list[dict]:
     """
     converts a layer into an svg readable item
     :param layer: the PSD image layer to be converted
@@ -92,10 +92,9 @@ def svg_converter(layer: Layer, id_num: int, get_dataurl: bool = False) -> dict:
         po_data = get_bitmap_arr(pixel_array, width, height, 3)
         pathlist = [get_svg_path(p.curve, x_offset, y_offset)
                     for p in process(po_data, optcurve=False)]
-        joined_paths = ' '.join(pathlist)
 
         return {
-            'svg_paths': joined_paths,
+            'svg_paths': pathlist,
             'color': avg_color(pixel_array),
             'id': layer_id
         }
@@ -181,12 +180,12 @@ def get_svg(all_layers: list, width: int, height: int) -> str:
 
             stroke = ("rgb(%s)" % rgb_portion)
             fill = ("rgba(%s,%f)" % (rgb_portion, FILL_OPACITY))
-            path = g['svg_paths']
-            this_id = g['id']
+            for svg_path in g['svg_paths']:
+                this_id = g['id']
 
-            svg_str += (('<path class="%s" d="%s" fill="%s" stroke="%s" ' +
-                         'stroke-width="%d"/>\n') % (this_id, path, fill,
-                                                     stroke, STROKE_WIDTH))
+                svg_str += (('<path class="%s" d="%s" fill="%s" stroke="%s" ' +
+                            'stroke-width="%d"/>\n') % (this_id, svg_path, fill,
+                                                        stroke, STROKE_WIDTH))
 
     return svg_str + '</svg>'
 

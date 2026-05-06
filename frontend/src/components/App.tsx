@@ -7,8 +7,8 @@ import {
 } from '@heroicons/react/16/solid';
 import React, { useState, useEffect, type ChangeEvent } from 'react';
 import { saveAs } from 'file-saver-es';
-import { runAnimation as runSvgAnimation } from '../services/svg-animation.service';
-import AnimateGraphic from './AnimateGraphic';
+import { runAnimation as runSvgAnimation, setInitialVizState } from '../services/svg-animation.service';
+import CarGraphic from './CarGraphic';
 import AnimateCodeSnippet from './AnimateCodeSnippet';
 import PlaygroundGraphic from './PlaygroundGraphic';
 import {
@@ -18,6 +18,8 @@ import {
 } from '../services/svg-playground.service';
 import YoutubeEmbed from './YoutubeEmbed';
 import { processFile } from '../services/svg-generate.service';
+import InteractCodeSnippet from './InteractCodeSnippet';
+import { drawInfoLines } from '../services/svg-interact.service';
 
 const App: React.FC = () => {
   const [activeSection, setActiveSection] = useState<string>('convert');
@@ -44,9 +46,14 @@ const App: React.FC = () => {
     }));
   };
 
+  useEffect(() => {
+    drawInfoLines();
+    setInitialVizState();
+  }, []);
+
   // Intersection Observer for Scroll-Spy
   useEffect(() => {
-    const sections = ['convert', 'learn', 'animate', 'playground'];
+    const sections = ['convert', 'learn', 'animate', 'interact', 'playground'];
 
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
       entries.forEach((entry) => {
@@ -110,6 +117,7 @@ const App: React.FC = () => {
     { label: 'Convert', id: 'convert' },
     { label: 'Learn', id: 'learn' },
     { label: 'Animate', id: 'animate' },
+    { label: 'Interact', id: 'interact' },
     { label: 'Playground', id: 'playground' }
   ];
 
@@ -239,7 +247,7 @@ const App: React.FC = () => {
           <div className="grid lg:grid-cols-2 gap-10">
             <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-lg p-8 border border-slate-100 dark:border-gray-700 flex flex-col items-center w-full flex flex-column max-content-height">
               <div className="w-full grow aspect-square bg-slate-50 dark:bg-gray-700 rounded-2xl flex items-center justify-center mb-8 min-h-0">
-                <AnimateGraphic />
+                <CarGraphic id="dataviz" />
               </div>
               <button
                 onClick={runAnimation}
@@ -267,6 +275,44 @@ const App: React.FC = () => {
           </div>
         </div>
       </section>
+
+
+      {/* Interact Section */}
+      <section
+        id="interact"
+        className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-gray-900 flex flex-col items-center"
+      >
+        <div className="max-w-6xl w-full px-6">
+          <h2 className="text-4xl font-extrabold mb-8 text-slate-800 dark:text-white">
+            Interact
+          </h2>
+          <div className="grid lg:grid-cols-2 gap-10">
+            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-lg p-8 border border-slate-100 dark:border-gray-700 flex flex-col items-center w-full flex flex-column max-content-height">
+              <div className="w-full grow aspect-square bg-slate-50 dark:bg-gray-700 rounded-2xl flex items-center justify-center mb-8 min-h-0">
+                <CarGraphic id="interactViz" />
+              </div>
+              <p className="italic text-slate-600 dark:text-gray-400">
+                Click on the wheels, windows, door, and lights to see information.
+              </p>
+            </div>
+
+            <div className="bg-black rounded-3xl pt-8 pb-8 text-indigo-300 font-mono text-sm shadow-2xl flex flex-col min-h-120">
+              <div className="flex flex-none items-center justify-between border-b border-slate-800 dark:border-gray-700 pb-4">
+                <div className="ml-8 mr-8 flex items-center gap-2 text-slate-400 dark:text-gray-500">
+                  <CommandLineIcon className="size-6" />
+                  <span className="text-xs uppercase tracking-widest font-bold">
+                    D3 Interaction
+                  </span>
+                </div>
+              </div>
+              <div className="flex-[1_1_0] pl-8 pr-8 pb-4 border-b border-slate-800 leading-relaxed overflow-auto">
+                <InteractCodeSnippet />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
 
       {/* Playground Section */}
       <section
