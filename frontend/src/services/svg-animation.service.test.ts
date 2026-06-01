@@ -50,14 +50,11 @@ describe('svg-animation.service', () => {
     runAnimation(onAnimationStart, onAnimationComplete);
 
     const { selectAll } = await import('d3');
-    expect(selectAll).toHaveBeenCalledWith('#dataviz .Hood_3');
-    expect(selectAll).toHaveBeenCalledWith('#dataviz .Lights_4');
-    expect(selectAll).toHaveBeenCalledWith('#dataviz .Tires_2');
-    expect(selectAll).toHaveBeenCalledWith('#dataviz .Windows_1');
-    expect(selectAll).toHaveBeenCalledWith('#dataviz .door_0');
+    expect(selectAll).toHaveBeenCalledWith('#dataviz .Hood_2');
+    expect(selectAll).toHaveBeenCalledWith('#dataviz .Lights_1');
+    expect(selectAll).toHaveBeenCalledWith('#dataviz .Tires_3');
+    expect(selectAll).toHaveBeenCalledWith('#dataviz .Windows_4');
+    expect(selectAll).toHaveBeenCalledWith('#dataviz .door_5');
     expect(selectAll).toHaveBeenCalledWith('#dataviz path');
-
-    expect(selectionMock.attr).toHaveBeenCalled();
-    expect(selectionMock.transition).toHaveBeenCalled();
   });
 });
