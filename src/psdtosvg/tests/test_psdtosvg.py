@@ -112,8 +112,8 @@ class TestPsdToSvg(unittest.TestCase):
 
     def test_get_svg(self):
         layers = [
-            {'image': 'data:image/png;base64,123', 'id': 'img1', 'x': 0, 'y': 0, 'width': 10, 'height': 10},
-            {'svg_paths': ["M 0 0 L 10 10 Z"], 'color': {'red': 255, 'green': 0, 'blue': 0}, 'id': 'path1'}
+            {'image': 'data:image/png;base64,123', 'id': 'img1', 'name': 'img', 'x': 0, 'y': 0, 'width': 10, 'height': 10},
+            {'svg_paths': ["M 0 0 L 10 10 Z"], 'color': {'red': 255, 'green': 0, 'blue': 0}, 'id': 'path1', 'name': 'path'}
         ]
         svg = get_svg(layers, 100, 100)
         self.assertIn('<svg', svg)

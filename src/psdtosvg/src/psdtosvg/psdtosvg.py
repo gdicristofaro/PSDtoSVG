@@ -1,7 +1,7 @@
 from __future__ import annotations
 from psd_tools import PSDImage
 from psd_tools.api.layers import Group, Layer
-from typing import Union, List, Dict, Any
+from typing import TypedDict, Union, List, Dict, Any
 import base64
 from io import BytesIO
 import re
@@ -11,7 +11,32 @@ from PIL import Image
 from psdtosvg.potrace import Bitmap, process, get_svg_path
 
 
-def get_bitmap_arr(pixel_array: np.ndarray, width: int, height: int, alpha_channel: int) -> Bitmap:
+class ColorData(TypedDict):
+    red: int
+    green: int
+    blue: int
+
+
+class PngImageData(TypedDict):
+    image: str
+    x: int
+    y: int
+    width: int
+    height: int
+    name: str
+    id: str
+
+
+class SvgPathData(TypedDict):
+    svg_paths: List[str]
+    color: ColorData
+    id: str
+    name: str
+
+
+def get_bitmap_arr(
+    pixel_array: np.ndarray, width: int, height: int, alpha_channel: int
+) -> Bitmap:
     """
     based on image data, creates a list where pixel is located at
     [x + width * y], the pixel is either true or false
@@ -25,21 +50,19 @@ def get_bitmap_arr(pixel_array: np.ndarray, width: int, height: int, alpha_chann
     return Bitmap(width, height, data)
 
 
-def avg_color(pixel_array: np.ndarray) -> dict:
+def avg_color(pixel_array: np.ndarray) -> ColorData:
     """
     gets the average color found in the image data
     :param pixel_array: the image data as an array of colors
     :returns: the average color found in the image
     """
     avg = np.mean(pixel_array[pixel_array[:, 3] > 0], axis=0)
-    return {
-        'red': avg[0],
-        'green': avg[1],
-        'blue': avg[2]
-    }
+    return {"red": avg[0], "green": avg[1], "blue": avg[2]}
 
 
-def svg_converter(layer: Layer, id_num: int, get_dataurl: bool = False) -> list[dict]:
+def svg_converter(
+    layer: Layer, id_num: int, get_dataurl: bool = False
+) -> list[Union[SvgPathData, PngImageData]]:
     """
     converts a layer into an svg readable item
     :param layer: the PSD image layer to be converted
@@ -59,44 +82,49 @@ def svg_converter(layer: Layer, id_num: int, get_dataurl: bool = False) -> list[
 
     # get alpha channel
     psd_numpy = layer.numpy()
-    img_dat = np.clip(psd_numpy * 255, 0, 255).astype('uint8')
+    img_dat = np.clip(psd_numpy * 255, 0, 255).astype("uint8")
     pixel_array = img_dat.reshape(-1, img_dat.shape[-1])
 
-    layer_id = str(re.sub(r'\W+', '', "%s_%d" % (layer.name, id_num)))
+    layer_name = layer.name
+    layer_id = str(re.sub(r"\W+", "", f"{layer.name}_{id_num}"))
 
     # cannot convert image or should be dataurl anyway, convert to image
     if len(img_dat[0]) < 4 or get_dataurl:
         # taken from https://stackoverflow.com/questions/42503995/
         # how-to-get-a-pil-image-as-a-base64-encoded-string/42504858
         buffer = BytesIO()
-        
-        image = Image.fromarray(img_dat, 'RGBA')
+
+        image = Image.fromarray(img_dat, "RGBA")
         image.save(buffer, format="PNG")
         buffer.seek(0)
         img_bytes = buffer.read()
         base64_bytes = base64.b64encode(img_bytes)
-        base64_str = base64_bytes.decode('ascii')
+        base64_str = base64_bytes.decode("ascii")
         # print("base64 is " + base64_str[:30] + "... (" + str(len(base64_str)) + " characters)")
 
         # base64 string from https://en.wikipedia.org/wiki/wiki/Data_URI_scheme
         return {
-            'image': "data:image/png;base64," + base64_str,
-            'x': x_offset,
-            'y': y_offset,
-            'width': width,
-            'height': height,
-            'id': layer_id
+            "image": "data:image/png;base64," + base64_str,
+            "x": x_offset,
+            "y": y_offset,
+            "width": width,
+            "height": height,
+            "name": layer_name,
+            "id": layer_id,
         }
     else:
         # create array to analyze with pypotrace
         po_data = get_bitmap_arr(pixel_array, width, height, 3)
-        pathlist = [get_svg_path(p.curve, x_offset, y_offset)
-                    for p in process(po_data, optcurve=False)]
+        pathlist = [
+            get_svg_path(p.curve, x_offset, y_offset)
+            for p in process(po_data, optcurve=False)
+        ]
 
         return {
-            'svg_paths': pathlist,
-            'color': avg_color(pixel_array),
-            'id': layer_id
+            "svg_paths": pathlist,
+            "color": avg_color(pixel_array),
+            "id": layer_id,
+            "name": layer_name,
         }
 
 
@@ -137,7 +165,7 @@ def handle_layers(psd: PSDImage) -> list:
     for index, layer in enumerate(layer_list):
 
         # last image is left as image and not converted to svg
-        if index == 0: #len(layer_list) - 1:
+        if index == 0:  # len(layer_list) - 1:
             svg_strs.append(svg_converter(layer, index, True))
         else:
             svg_strs.append(svg_converter(layer, index))
@@ -146,10 +174,13 @@ def handle_layers(psd: PSDImage) -> list:
 
 
 STROKE_WIDTH = 2
-FILL_OPACITY = .6
+FILL_OPACITY = 0.6
+INDENT = "  "
 
 
-def get_svg(all_layers: list, width: int, height: int) -> str:
+def get_svg(
+    all_layers: list[Union[SvgPathData, PngImageData]], width: int, height: int
+) -> str:
     """
     creates an SVG file with all layers included
     :param all_layers: the processed layer items to be added
@@ -158,36 +189,44 @@ def get_svg(all_layers: list, width: int, height: int) -> str:
     :returns: the generated SVG string
     """
 
-    svg_str = '''<?xml version="1.0" encoding="UTF-8" ?>
+    svg_str = f"""<?xml version="1.0" encoding="UTF-8" ?>
 <svg
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:xlink="http://www.w3.org/1999/xlink"
-   viewBox="0 0 %d %d"
-   version="1.1">''' % (width, height)
+   viewBox="0 0 {width} {height}"
+   version="1.1">\n"""
 
     for g in all_layers:
-        if 'image' in g:
-            svg_str += (('<image class="%s" xlink:href="%s" height="%d"' +
-                         ' width="%d" x="%d" y="%d"/>\n') %
-                        (g['id'], g['image'], g['height'],
-                         g['width'], g['x'], g['y']))
 
-        elif 'svg_paths' in g:
-            color = g['color']
-            rgb_portion = ("%d,%d,%d" % (color['red'], color['green'],
-                                         color['blue']))
+        svg_str += f'{INDENT}<g id="{g["id"]}_group">\n'
+        svg_str += f'{INDENT}{INDENT}<title>{g["name"]}</title>\n'
 
-            stroke = ("rgb(%s)" % rgb_portion)
-            fill = ("rgba(%s,%f)" % (rgb_portion, FILL_OPACITY))
-            for svg_path in g['svg_paths']:
-                this_id = g['id']
+        if "image" in g:
+            svg_str += (
+                f'{INDENT}{INDENT}<image class="{g['id']}" '
+                + f'xlink:href="{g['image']}" height="{g['height']}" '
+                + f'width="{g['width']}" x="{g['x']}" y="{g['y']}"/>\n'
+            )
 
-                svg_str += (('<path class="%s" d="%s" fill="%s" stroke="%s" ' +
-                            'stroke-width="%d"/>\n') % (this_id, svg_path, fill,
-                                                        stroke, STROKE_WIDTH))
+        elif "svg_paths" in g:
+            color = g["color"]
+            rgb_portion = f"{color['red']},{color['green']},{color['blue']}"
 
-    return svg_str + '</svg>'
+            stroke = f"rgb({rgb_portion})"
+            fill = f"rgba({rgb_portion},{FILL_OPACITY})"
+            for svg_path in g["svg_paths"]:
+                this_id = g["id"]
+
+                svg_str += (
+                    f'{INDENT}{INDENT}<path class="{this_id}" d="{svg_path}" '
+                      + f'fill="{fill}" stroke="{stroke}" '
+                      + f'stroke-width="{STROKE_WIDTH}"/>\n'
+                )
+
+        svg_str += f'{INDENT}</g>\n'
+
+    return svg_str + "</svg>"
 
 
 def psd_to_svg(psd: PSDImage) -> str:
