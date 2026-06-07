@@ -204,9 +204,9 @@ def get_svg(
 
         if "image" in g:
             svg_str += (
-                f'{INDENT}{INDENT}<image class="{g['id']}" '
-                + f'xlink:href="{g['image']}" height="{g['height']}" '
-                + f'width="{g['width']}" x="{g['x']}" y="{g['y']}"/>\n'
+                f'{INDENT}{INDENT}<image class="{g["id"]}" '
+                + f'xlink:href="{g["image"]}" height="{g["height"]}" '
+                + f'width="{g["width"]}" x="{g["x"]}" y="{g["y"]}"/>\n'
             )
 
         elif "svg_paths" in g:
