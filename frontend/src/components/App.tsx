@@ -212,7 +212,7 @@ const App: React.FC = () => {
                     saveAs(blob, processedSvg.fileName);
                   }
                 }}
-                className={`flex flex-wrap items-center gap-2 bg-white dark:bg-gray-800 border-2 border-slate-100 dark:border-gray-700 px-8 py-4 rounded-xl hover:border-slate-200 dark:hover:border-gray-500 transition-all disabled:opacity-40 disabled:grayscale text-slate-700 dark:text-white font-bold ${processedSvg ? 'cursor-pointer' : ''}`}
+                className="flex flex-wrap items-center gap-2 bg-white dark:bg-gray-800 border-2 border-slate-100 dark:border-gray-700 px-8 py-4 rounded-xl enabled:hover:border-slate-200 dark:enabled:hover:border-gray-500 transition-all disabled:opacity-40 disabled:grayscale disabled:cursor-default enabled:cursor-pointer"
               >
                 <ArrowDownIcon className="size-6" />
                 <span className="whitespace-normal">Download</span>
@@ -252,7 +252,7 @@ const App: React.FC = () => {
               <button
                 onClick={runAnimation}
                 disabled={isAnimating}
-                className="w-full flex-none flex items-center justify-center gap-3 bg-indigo-600 text-white px-8 py-4 rounded-xl hover:bg-indigo-700 transition-all disabled:opacity-50 font-bold"
+                className="w-full flex-none flex items-center justify-center gap-3 bg-indigo-600 text-white px-8 py-4 rounded-xl enabled:hover:bg-indigo-700 transition-all disabled:opacity-50 font-bold enabled:cursor-pointer disabled:cursor-default"
               >
                 <PlayIcon className="size-6" />
                 {isAnimating ? 'Animating...' : 'Run D3 Script'}
@@ -335,7 +335,7 @@ const App: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => toggleCard('dashArray')}
-                  className="p-4 pb-5 w-full flex items-center justify-between gap-3 text-left"
+                  className="p-4 pb-5 w-full flex items-center justify-between gap-3 text-left cursor-pointer"
                 >
                   <p className="font-bold text-slate-700 dark:text-white uppercase tracking-tight">
                     Dash Array Pattern
@@ -355,7 +355,7 @@ const App: React.FC = () => {
                     {['None', 'Small', 'Medium', 'Large'].map((label, idx) => (
                       <label
                         key={label}
-                        className={`flex flex-wrap items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all cursor-pointer ${playgroundState.dashArray === label.toLocaleLowerCase() ? 'bg-indigo-600 border-indigo-600 text-white' : 'bg-white dark:bg-gray-800 border-slate-100 dark:border-gray-700 text-slate-500 dark:text-gray-400 hover:border-indigo-200 dark:hover:border-indigo-500'}`}
+                        className={`flex flex-wrap items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all ${playgroundState.dashArray === label.toLocaleLowerCase() ? 'bg-indigo-600 border-indigo-600 text-white' : 'cursor-pointer bg-white dark:bg-gray-800 border-slate-100 dark:border-gray-700 text-slate-500 dark:text-gray-400 hover:border-indigo-200 dark:hover:border-indigo-500'}`}
                       >
                         <input
                           type="radio"
@@ -383,7 +383,7 @@ const App: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => toggleCard('sliders')}
-                  className="p-4 pb-5 flex items-center justify-between gap-3 text-left"
+                  className="p-4 pb-5 flex items-center justify-between gap-3 text-left cursor-pointer"
                 >
                   <p className="font-bold text-slate-700 dark:text-white uppercase tracking-tight">
                     Controls
@@ -455,7 +455,7 @@ const App: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => toggleCard('color')}
-                  className="p-4 pb-5 flex items-center justify-between gap-3 text-left"
+                  className="p-4 pb-5 flex items-center justify-between gap-3 text-left cursor-pointer"
                 >
                   <p className="text-white font-bold text-xs uppercase tracking-widest">
                     Color Mapping

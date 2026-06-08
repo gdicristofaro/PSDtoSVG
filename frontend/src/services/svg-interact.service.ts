@@ -64,18 +64,21 @@ function drawInfoLine(
     const selection = d3.select(this);
 
     selection
+      .style('cursor', 'pointer')
       .style('opacity', 0.0)
       .on('click', function () {
         svg.selectAll(".interact_selected")
             .classed("interact_selected", false)
             .transition()
             .duration(200)
-            .style('opacity', 0);
+            .style('opacity', 0)
+            .style('cursor', 'pointer');
 
         selection.classed("interact_selected", true)
             .transition()
             .duration(200)
-            .style('opacity', 1);
+            .style('opacity', 1)
+            .style('cursor', 'default');
         lineGroup.classed("interact_selected", true)
             .transition()
             .duration(200)
