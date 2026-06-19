@@ -1,6 +1,11 @@
 import * as d3 from 'd3';
 
-type BaseSelection = d3.Selection<d3.BaseType, unknown, HTMLElement, unknown>;
+type BaseSelection = 
+  d3.Selection<
+    d3.BaseType, 
+    unknown, 
+    HTMLElement, 
+    unknown>;
 
 const GREEN = 'rgb(19, 104, 14)';
 const RED = 'rgb(178, 13, 13)';
@@ -33,8 +38,12 @@ function animateIn(
     .style('stroke-opacity', 1);
 }
 
-function vizSetColor(selection: BaseSelection, color: string) {
-  selection.attr('fill', color).attr('stroke', color);
+function vizSetColor(
+  selection: BaseSelection, 
+  color: string) {
+  selection
+    .attr('fill', color)
+    .attr('stroke', color);
 }
 
 export function setInitialVizState() {

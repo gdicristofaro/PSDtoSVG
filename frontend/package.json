@@ -19,9 +19,10 @@
     "@tailwindcss/vite": "^4.2.4",
     "d3": "^7.9.0",
     "file-saver-es": "^2.0.5",
-    "pyodide": "^0.29.3",
+    "pyodide": "^0.29.4",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
+    "react-syntax-highlighter": "^16.1.1",
     "tailwindcss": "^4.2.4"
   },
   "devDependencies": {
@@ -31,6 +32,7 @@
     "@types/node": "^24.12.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "@types/react-syntax-highlighter": "^15.5.13",
     "@vitejs/plugin-react": "^6.0.1",
     "cross-env": "^10.1.0",
     "eslint": "^9.39.4",

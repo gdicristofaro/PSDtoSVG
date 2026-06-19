@@ -7,3 +7,11 @@
 .max-content-height {
     max-height: calc(95dvh - var(--navheight));
 }
+
+/* Keyboard focus indicator for the otherwise-invisible interactive car parts.
+   !important overrides the inline opacity:0 d3 sets on each part. */
+#interactViz [role="button"]:focus-visible {
+    opacity: 0.35 !important;
+    outline: 3px solid #fff;
+    outline-offset: 2px;
+}

@@ -5,7 +5,7 @@ import {
   CommandLineIcon,
   PlayIcon
 } from '@heroicons/react/16/solid';
-import React, { useState, useEffect, type ChangeEvent } from 'react';
+import React, { useState, useEffect, useRef, type ChangeEvent } from 'react';
 import { saveAs } from 'file-saver-es';
 import { runAnimation as runSvgAnimation, setInitialVizState } from '../services/svg-animation.service';
 import CarGraphic from './CarGraphic';
@@ -32,6 +32,8 @@ const App: React.FC = () => {
   const [playgroundState, setPlaygroundState] = useState<PlaygroundState>(
     initialPlaygroundState
   );
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [expandedCards, setExpandedCards] = useState({
     dashArray: true,
@@ -191,16 +193,20 @@ const App: React.FC = () => {
               )}
             </div>
             <div className="flex flex-wrap gap-4 justify-center w-full">
-              <label className="flex flex-wrap items-center gap-2 bg-indigo-600 text-white px-8 py-4 rounded-xl hover:bg-indigo-700 transition-all cursor-pointer shadow-lg shadow-indigo-200/80 dark:shadow-indigo-900/40">
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="flex flex-wrap items-center gap-2 bg-indigo-600 text-white px-8 py-4 rounded-xl hover:bg-indigo-700 transition-all cursor-pointer shadow-lg shadow-indigo-200/80 dark:shadow-indigo-900/40"
+              >
                 <ArrowUpTrayIcon className="size-6" />
                 <span className="font-bold whitespace-normal">Upload PSD</span>
                 <input
+                  ref={fileInputRef}
                   type="file"
                   className="hidden"
                   accept=".psd"
                   onChange={handleFileUpload}
                 />
-              </label>
+              </button>
               <button
                 role="link"
                 disabled={!processedSvg}
@@ -245,9 +251,9 @@ const App: React.FC = () => {
             Animate
           </h2>
           <div className="grid lg:grid-cols-2 gap-10">
-            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-lg p-8 border border-slate-100 dark:border-gray-700 flex flex-col items-center w-full flex flex-column max-content-height">
+            <div className="min-w-0 bg-white dark:bg-gray-800 rounded-3xl shadow-lg p-8 border border-slate-100 dark:border-gray-700 flex flex-col items-center w-full flex flex-column max-content-height">
               <div className="w-full grow aspect-square bg-slate-50 dark:bg-gray-700 rounded-2xl flex items-center justify-center mb-8 min-h-0">
-                <CarGraphic id="dataviz" />
+                <CarGraphic id="dataviz" label="Car diagram" />
               </div>
               <button
                 onClick={runAnimation}
@@ -259,7 +265,7 @@ const App: React.FC = () => {
               </button>
             </div>
 
-            <div className="bg-black rounded-3xl pt-8 pb-8 text-indigo-300 font-mono text-sm shadow-2xl flex flex-col min-h-120">
+            <div className="min-w-0 bg-black rounded-3xl pt-8 pb-8 text-indigo-300 font-mono text-sm shadow-2xl flex flex-col min-h-120">
               <div className="flex flex-none items-center justify-between border-b border-slate-800 dark:border-gray-700 pb-4">
                 <div className="ml-8 mr-8 flex items-center gap-2 text-slate-400 dark:text-gray-500">
                   <CommandLineIcon className="size-6" />
@@ -268,14 +274,13 @@ const App: React.FC = () => {
                   </span>
                 </div>
               </div>
-              <div className="flex-[1_1_0] pl-8 pr-8 pb-4 border-b border-slate-800 leading-relaxed overflow-auto">
+              <div className="flex-[1_1_0] min-w-0 pl-4 pr-8 pt-2 pb-2 border-b border-slate-800 leading-relaxed overflow-auto">
                 <AnimateCodeSnippet />
               </div>
             </div>
           </div>
         </div>
       </section>
-
 
       {/* Interact Section */}
       <section
@@ -287,16 +292,20 @@ const App: React.FC = () => {
             Interact
           </h2>
           <div className="grid lg:grid-cols-2 gap-10">
-            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-lg p-8 border border-slate-100 dark:border-gray-700 flex flex-col items-center w-full flex flex-column max-content-height">
-              <div className="w-full grow aspect-square bg-slate-50 dark:bg-gray-700 rounded-2xl flex items-center justify-center mb-8 min-h-0">
-                <CarGraphic id="interactViz" />
+            <div className="min-w-0 bg-white dark:bg-gray-800 rounded-3xl shadow-lg p-8 border border-slate-100 dark:border-gray-700 flex flex-col items-center flex flex-column max-content-height">
+              <div className="grow aspect-square bg-slate-50 dark:bg-gray-700 rounded-2xl flex items-center justify-center mb-8 min-h-0">
+                <CarGraphic
+                  id="interactViz"
+                  label="Interactive car diagram. Select a part to view its details."
+                  interactive
+                />
               </div>
               <p className="italic text-slate-600 dark:text-gray-400">
-                Click on the wheels, windows, door, and lights to see information.
+                Click on the wheels, windows, door, or lights to see information.
               </p>
             </div>
 
-            <div className="bg-black rounded-3xl pt-8 pb-8 text-indigo-300 font-mono text-sm shadow-2xl flex flex-col min-h-120">
+            <div className="min-w-0 bg-black rounded-3xl pt-8 pb-8 text-indigo-300 font-mono text-sm shadow-2xl flex flex-col min-h-120">
               <div className="flex flex-none items-center justify-between border-b border-slate-800 dark:border-gray-700 pb-4">
                 <div className="ml-8 mr-8 flex items-center gap-2 text-slate-400 dark:text-gray-500">
                   <CommandLineIcon className="size-6" />
@@ -305,7 +314,7 @@ const App: React.FC = () => {
                   </span>
                 </div>
               </div>
-              <div className="flex-[1_1_0] pl-8 pr-8 pb-4 border-b border-slate-800 leading-relaxed overflow-auto">
+              <div className="flex-[1_1_0] min-w-0 pl-4 pr-8 pt-2 pb-2 border-b border-slate-800 leading-relaxed overflow-auto">
                 <InteractCodeSnippet />
               </div>
             </div>
@@ -324,17 +333,19 @@ const App: React.FC = () => {
             Playground
           </h2>
           <div className="grid lg:grid-cols-12 gap-8">
-            <div className="lg:col-span-7 bg-slate-50 dark:bg-gray-700 rounded-[2.5rem] max-content-height flex items-center justify-center shadow-inner border border-slate-100 dark:border-gray-700 p-8">
+            <div className="min-w-0 lg:col-span-7 bg-slate-50 dark:bg-gray-700 rounded-[2.5rem] max-content-height flex items-center justify-center shadow-inner border border-slate-100 dark:border-gray-700 p-8">
               <div className="flex grow min-h-0 h-full items-center justify-center transition-transform duration-300 ease-out grow">
                 <PlaygroundGraphic playgroundState={playgroundState} />
               </div>
             </div>
 
-            <div className="lg:col-span-5 space-y-4">
+            <div className="min-w-0 lg:col-span-5 space-y-4">
               <div className="flex flex-col items-stretch bg-slate-50 dark:bg-gray-700 rounded-3xl border border-slate-100 dark:border-gray-700">
                 <button
                   type="button"
                   onClick={() => toggleCard('dashArray')}
+                  aria-expanded={expandedCards.dashArray}
+                  aria-controls="dashArray-panel"
                   className="p-4 pb-5 w-full flex items-center justify-between gap-3 text-left cursor-pointer"
                 >
                   <p className="font-bold text-slate-700 dark:text-white uppercase tracking-tight">
@@ -347,15 +358,26 @@ const App: React.FC = () => {
                   />
                 </button>
                 <div
+                  id="dashArray-panel"
+                  inert={!expandedCards.dashArray}
                   className={`overflow-hidden transition-all duration-300 ${
                     expandedCards.dashArray ? 'max-h-[1000px]' : 'max-h-0'
                   }`}
                 >
-                  <div className="m-4 mt-0 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div className="m-4 mt-0 pt-1 grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {['None', 'Small', 'Medium', 'Large'].map((label, idx) => (
-                      <label
+                      <div
                         key={label}
-                        className={`flex flex-wrap items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all ${playgroundState.dashArray === label.toLocaleLowerCase() ? 'bg-indigo-600 border-indigo-600 text-white' : 'cursor-pointer bg-white dark:bg-gray-800 border-slate-100 dark:border-gray-700 text-slate-500 dark:text-gray-400 hover:border-indigo-200 dark:hover:border-indigo-500'}`}
+                        role="button"
+                        tabIndex={0}
+                        onClick={() => updatePlayground('dashArray', label.toLocaleLowerCase())}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            updatePlayground('dashArray', label.toLocaleLowerCase());
+                          }
+                        }}
+                        className={`min-w-0 flex flex-wrap items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all ${playgroundState.dashArray === label.toLocaleLowerCase() ? 'bg-indigo-600 border-indigo-600 text-white' : 'cursor-pointer bg-white dark:bg-gray-800 border-slate-100 dark:border-gray-700 text-slate-500 dark:text-gray-400 hover:border-indigo-200 dark:hover:border-indigo-500'}`}
                       >
                         <input
                           type="radio"
@@ -373,7 +395,7 @@ const App: React.FC = () => {
                           }
                         />
                         <span className="text-sm font-bold">{label}</span>
-                      </label>
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -383,6 +405,8 @@ const App: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => toggleCard('sliders')}
+                  aria-expanded={expandedCards.sliders}
+                  aria-controls="sliders-panel"
                   className="p-4 pb-5 flex items-center justify-between gap-3 text-left cursor-pointer"
                 >
                   <p className="font-bold text-slate-700 dark:text-white uppercase tracking-tight">
@@ -395,11 +419,13 @@ const App: React.FC = () => {
                   />
                 </button>
                 <div
+                  id="sliders-panel"
+                  inert={!expandedCards.sliders}
                   className={`overflow-hidden transition-all duration-300 ${
                     expandedCards.sliders ? 'max-h-[2000px]' : 'max-h-0'
                   }`}
                 >
-                  <div className="m-4 mt-0 space-y-2">
+                  <div className="m-4 mt-0 pt-1 space-y-2">
                     {[
                       {
                         label: 'Global Scale',
@@ -455,9 +481,11 @@ const App: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => toggleCard('color')}
+                  aria-expanded={expandedCards.color}
+                  aria-controls="color-panel"
                   className="p-4 pb-5 flex items-center justify-between gap-3 text-left cursor-pointer"
                 >
-                  <p className="text-white font-bold text-xs uppercase tracking-widest">
+                  <p className="text-white font-bold uppercase tracking-widest">
                     Color Mapping
                   </p>
                   <ChevronDownIcon
@@ -467,11 +495,13 @@ const App: React.FC = () => {
                   />
                 </button>
                 <div
+                  id="color-panel"
+                  inert={!expandedCards.color}
                   className={`overflow-hidden transition-all duration-300 ${
                     expandedCards.color ? 'max-h-[1400px]' : 'max-h-0'
                   }`}
                 >
-                  <div className="m-4 mt-0 space-y-2">
+                  <div className="m-4 mt-0 pt-1 space-y-2">
                     {['Door', 'Tire', 'Hood', 'Lights', 'Window'].map(
                       (part) => {
                         const key =
