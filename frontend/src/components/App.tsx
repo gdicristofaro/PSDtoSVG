@@ -189,7 +189,7 @@ const App: React.FC = () => {
                   />
                 </div>
               ) : (
-                <p className="text-slate-400 dark:text-gray-500 font-medium">SVG Preview Area</p>
+                <p className="text-slate-600 dark:text-gray-400 font-medium">SVG Preview Area</p>
               )}
             </div>
             <div className="flex flex-wrap gap-4 justify-center w-full">
@@ -274,7 +274,15 @@ const App: React.FC = () => {
                   </span>
                 </div>
               </div>
-              <div className="flex-[1_1_0] min-w-0 pl-4 pr-8 pt-2 pb-2 border-b border-slate-800 leading-relaxed overflow-auto">
+              <div
+                // A scrollable region must be keyboard focusable so it can be scrolled
+                // without a mouse (WCAG 2.1.1; axe scrollable-region-focusable).
+                // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+                tabIndex={0}
+                role="region"
+                aria-label="D3 transition code"
+                className="flex-[1_1_0] min-w-0 pl-4 pr-8 pt-2 pb-2 border-b border-slate-800 leading-relaxed overflow-auto"
+              >
                 <AnimateCodeSnippet />
               </div>
             </div>
@@ -314,7 +322,15 @@ const App: React.FC = () => {
                   </span>
                 </div>
               </div>
-              <div className="flex-[1_1_0] min-w-0 pl-4 pr-8 pt-2 pb-2 border-b border-slate-800 leading-relaxed overflow-auto">
+              <div
+                // A scrollable region must be keyboard focusable so it can be scrolled
+                // without a mouse (WCAG 2.1.1; axe scrollable-region-focusable).
+                // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+                tabIndex={0}
+                role="region"
+                aria-label="D3 interaction code"
+                className="flex-[1_1_0] min-w-0 pl-4 pr-8 pt-2 pb-2 border-b border-slate-800 leading-relaxed overflow-auto"
+              >
                 <InteractCodeSnippet />
               </div>
             </div>
@@ -454,7 +470,7 @@ const App: React.FC = () => {
                       }
                     ].map((s) => (
                       <div key={s.key}>
-                        <div className="flex justify-between text-xs font-black text-slate-400 dark:text-gray-300 uppercase mb-2">
+                        <div className="flex justify-between text-xs font-black text-slate-600 dark:text-gray-300 uppercase mb-2">
                           <span>{s.label}</span>
                           <span className="text-indigo-700 dark:text-indigo-300">
                             {playgroundState[s.key]}
@@ -462,6 +478,7 @@ const App: React.FC = () => {
                         </div>
                         <input
                           type="range"
+                          aria-label={s.label}
                           min={s.min}
                           max={s.max}
                           step={s.step ?? 1}
@@ -510,6 +527,7 @@ const App: React.FC = () => {
                           <div key={key}>
                             <input
                               type="range"
+                              aria-label={`${part} hue`}
                               min="0"
                               max="1"
                               step="0.01"

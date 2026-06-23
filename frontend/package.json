@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build",
     "build-server-frontend": "cross-env VITE_BUILD_BACKEND=true npm run build && rm -r dist/assets/pyodide",
     "test": "vitest run",
+    "test:e2e": "playwright test",
     "lint": "eslint .",
     "preview": "vite preview",
     "copy-pydep": "cp ../src/psdtosvg/dist/psdtosvg*.whl public/assets/pyodide/",
@@ -26,7 +27,9 @@
     "tailwindcss": "^4.2.4"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.12.1",
     "@eslint/js": "^9.39.4",
+    "@playwright/test": "^1.61.0",
     "@types/d3": "^7.4.3",
     "@types/file-saver-es": "^2.0.3",
     "@types/node": "^24.12.2",
