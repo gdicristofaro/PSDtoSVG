@@ -293,15 +293,15 @@ const App: React.FC = () => {
       {/* Interact Section */}
       <section
         id="interact"
-        className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-gray-900 flex flex-col items-center"
+        className="min-h-screen pt-24 pb-12 bg-white dark:bg-gray-800 flex flex-col items-center"
       >
         <div className="max-w-6xl w-full px-6">
           <h2 className="text-4xl font-extrabold mb-8 text-slate-800 dark:text-white">
             Interact
           </h2>
           <div className="grid lg:grid-cols-2 gap-10">
-            <div className="min-w-0 bg-white dark:bg-gray-800 rounded-3xl shadow-lg p-8 border border-slate-100 dark:border-gray-700 flex flex-col items-center flex flex-column max-content-height">
-              <div className="grow aspect-square bg-slate-50 dark:bg-gray-700 rounded-2xl flex items-center justify-center mb-8 min-h-0">
+            <div className="min-w-0 bg-slate-50 dark:bg-gray-700 rounded-3xl shadow-lg p-8 border border-slate-100 dark:border-gray-700 flex flex-col items-center flex flex-column max-content-height">
+              <div className="grow aspect-square rounded-2xl flex items-center justify-center mb-8 min-h-0 w-full">
                 <CarGraphic
                   id="interactViz"
                   label="Interactive car diagram. Select a part to view its details."
@@ -342,21 +342,21 @@ const App: React.FC = () => {
       {/* Playground Section */}
       <section
         id="playground"
-        className="min-h-screen pt-24 pb-20 bg-white dark:bg-gray-800 flex flex-col items-center"
+        className="min-h-screen pt-24 pb-20 bg-slate-50 dark:bg-gray-900 flex flex-col items-center"
       >
         <div className="max-w-6xl w-full px-6">
           <h2 className="text-4xl font-extrabold mb-12 text-slate-800 dark:text-white">
             Playground
           </h2>
           <div className="grid lg:grid-cols-12 gap-8">
-            <div className="min-w-0 lg:col-span-7 bg-slate-50 dark:bg-gray-700 rounded-[2.5rem] max-content-height flex items-center justify-center shadow-inner border border-slate-100 dark:border-gray-700 p-8">
+            <div className="min-w-0 lg:col-span-7 bg-white dark:bg-gray-800 rounded-[2.5rem] max-content-height flex items-center justify-center shadow-inner border border-slate-100 dark:border-gray-700 p-8">
               <div className="flex grow min-h-0 h-full items-center justify-center transition-transform duration-300 ease-out grow">
                 <PlaygroundGraphic playgroundState={playgroundState} />
               </div>
             </div>
 
             <div className="min-w-0 lg:col-span-5 space-y-4">
-              <div className="flex flex-col items-stretch bg-slate-50 dark:bg-gray-700 rounded-3xl border border-slate-100 dark:border-gray-700">
+              <div className="flex flex-col items-stretch bg-white dark:bg-gray-800 rounded-3xl border border-slate-100 dark:border-gray-700">
                 <button
                   type="button"
                   onClick={() => toggleCard('dashArray')}
@@ -393,7 +393,7 @@ const App: React.FC = () => {
                             updatePlayground('dashArray', label.toLocaleLowerCase());
                           }
                         }}
-                        className={`min-w-0 flex flex-wrap items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all ${playgroundState.dashArray === label.toLocaleLowerCase() ? 'bg-indigo-600 border-indigo-600 text-white' : 'cursor-pointer bg-white dark:bg-gray-800 border-slate-100 dark:border-gray-700 text-slate-500 dark:text-gray-400 hover:border-indigo-200 dark:hover:border-indigo-500'}`}
+                        className={`min-w-0 flex flex-wrap items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all ${playgroundState.dashArray === label.toLocaleLowerCase() ? 'bg-indigo-600 border-indigo-600 text-white' : 'cursor-pointer bg-slate-50 dark:bg-gray-700 border-slate-100 dark:border-gray-700 text-slate-500 dark:text-gray-400 hover:border-indigo-200 dark:hover:border-indigo-500'}`}
                       >
                         <input
                           type="radio"
@@ -417,7 +417,7 @@ const App: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex flex-col items-stretch bg-slate-50 dark:bg-gray-700 rounded-3xl border border-slate-100 dark:border-gray-700">
+              <div className="flex flex-col items-stretch bg-white dark:bg-gray-800 rounded-3xl border border-slate-100 dark:border-gray-700">
                 <button
                   type="button"
                   onClick={() => toggleCard('sliders')}
@@ -494,7 +494,7 @@ const App: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex flex-col items-stretch bg-slate-900 dark:bg-gray-900 rounded-3xl shadow-xl">
+              <div className="flex flex-col items-stretch bg-black rounded-3xl shadow-xl">
                 <button
                   type="button"
                   onClick={() => toggleCard('color')}
